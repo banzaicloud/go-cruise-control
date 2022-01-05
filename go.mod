@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/go-logr/logr v1.2.1
-	github.com/go-logr/stdr v1.2.0
 	github.com/onsi/gomega v1.17.0
 	github.com/pkg/errors v0.9.1
 )
