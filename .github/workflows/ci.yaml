@@ -1,0 +1,57 @@
+name: CI
+
+on: [push]
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Install Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '~1.17'
+      - name: Run go fmt
+        run: make fmt
+      - name: Run go vet
+        run: make vet
+      - name: Run linter
+        run: make lint
+
+  license:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Update license cache
+        run: make license-cache
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run license check
+        run: make license-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Install Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '~1.17'
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Run integration tests
+        run: make integration-test
+

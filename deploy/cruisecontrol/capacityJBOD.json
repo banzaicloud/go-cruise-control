@@ -1,0 +1,14 @@
+{
+  "brokerCapacities":[
+    {
+      "brokerId": "-1",
+      "capacity": {
+        "DISK": "1000000",
+        "CPU": "100",
+        "NW_IN": "10000",
+        "NW_OUT": "10000"
+      },
+      "doc": "The default capacity for a broker with multiple logDirs each on a separate heterogeneous disk."
+    }
+  ]
+}
