@@ -68,7 +68,7 @@ Running integration tests creates a new test environment prior executing the tes
 make integration-test
 ```
 
-Set the `USE_EXISTING=true` environment variable if reuse the existing development/test environment
+Set the `USE_EXISTING=true` environment variable if reusing the existing development/test environment
 for integration testing is the desired behaviour.
 
 ```shell
