@@ -15,6 +15,7 @@
 <!-- Place an '[x]' (no spaces) in all applicable fields. Please remove unrelated fields. -->
 
 - [ ] Implementation tested
+- [ ] Tested against Cruise Control version: x.y.z (if applicable)
 - [ ] User guide and development docs updated (if needed)
 
 ### To Do
