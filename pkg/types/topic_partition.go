@@ -19,5 +19,4 @@ package types
 type TopicPartition struct {
 	Partition int32  `json:"partition"`
 	Topic     string `json:"topic"`
-	// Hash      int64  `json:"hash"`
 }

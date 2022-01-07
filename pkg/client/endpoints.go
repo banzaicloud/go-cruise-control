@@ -31,8 +31,6 @@ func (c *Client) AddBroker(r *api.AddBrokerRequest) (*api.AddBrokerResponse, err
 	return resp, nil
 }
 
-// https://github.com/linkedin/cruise-control/pull/1701
-
 func (c *Client) Admin(r *api.AdminRequest) (*api.AdminResponse, error) {
 	resp := &api.AdminResponse{}
 	if err := c.request(r, resp, api.EndpointAdmin, http.MethodPost, DefaultRequestTimeout); err != nil {
