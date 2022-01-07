@@ -3,6 +3,8 @@
 It's client library (written in Golang) for interacting with
 [Linkedin Cruise Control](https://github.com/linkedin/cruise-control) using its HTTP API.
 
+Supported _Cruise Control_ versions: **2.5.x** (tested with v2.5.80)
+
 ## How to use it
 
 ```shell
@@ -79,7 +81,7 @@ make integration-test
 ## Support
 
 If you encounter problems while using this project than open an issue or talk to us
-on [#kafka-operator](https://banzaicloud.com/invite-slack/) channel on the Banzai Cloud Slack.
+on `#kafka-operator` channel on the [Banzai Cloud Community Slack](http://community-banzaicloud.slack.com).
 
 ## Contributing
 
