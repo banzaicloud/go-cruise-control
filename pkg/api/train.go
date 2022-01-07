@@ -41,19 +41,21 @@ type TrainRequest struct {
 }
 
 func (s TrainRequest) Validate() error {
-	if s.Start < 1 {
-		return errors.New("timestamp for training start must be bigger then 0")
+	if s.Start < -1 {
+		return errors.New("timestamp for training start must be bigger then -1")
 	}
 
-	if s.End < 1 {
-		return errors.New("timestamp for training end must be bigger then 0")
+	if s.End < 0 {
+		return errors.New("timestamp for training end must be 0 or bigger number")
 	}
 
 	return nil
 }
 
 func TrainRequestWithDefaults() *TrainRequest {
-	return &TrainRequest{}
+	return &TrainRequest{
+		Start: -1,
+	}
 }
 
 type TrainResponse struct {
