@@ -3,7 +3,10 @@
     {
       "brokerId": "-1",
       "capacity": {
-        "DISK": "1000000",
+        "DISK": {
+          "/var/lib/kafka/data0": "100000",
+          "/var/lib/kafka/data1": "100000"
+        },
         "CPU": "100",
         "NW_IN": "10000",
         "NW_OUT": "10000"
