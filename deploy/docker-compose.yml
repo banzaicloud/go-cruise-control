@@ -96,7 +96,7 @@ services:
     volumes:
       - type: volume
         source: kafka_0_data
-        target: /var/lib/kafka/data
+        target: /var/lib/kafka
       - type: volume
         source: kafka_0_secrets
         target: /etc/kafka/secrets
