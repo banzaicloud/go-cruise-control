@@ -223,7 +223,7 @@ services:
       retries: 30
 
   cruisecontrol:
-    image: ghcr.io/banzaicloud/cruise-control:2.5.80
+    image: ghcr.io/banzaicloud/cruise-control:2.5.86
     restart: unless-stopped
     hostname: cruisecontrol
     container_name: cruisecontrol
