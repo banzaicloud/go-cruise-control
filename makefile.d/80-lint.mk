@@ -1,6 +1,6 @@
 ##@ Linter
 
-GOLANGCI_VERSION = 1.43.0
+GOLANGCI_VERSION = 1.46.1
 
 bin/golangci-lint: bin/golangci-lint-$(GOLANGCI_VERSION)
 	@ln -sf golangci-lint-$(GOLANGCI_VERSION) bin/golangci-lint
