@@ -44,7 +44,7 @@ func main() {
 
 ### Prerequisites
 
-* golang `1.17`
+* golang `1.18`
 * docker
 * docker-compose
 
