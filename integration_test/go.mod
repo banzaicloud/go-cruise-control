@@ -20,6 +20,7 @@ require (
 require (
 	github.com/containerd/containerd v1.5.10 // indirect
 	github.com/opencontainers/runc v1.1.2 // indirect
+	gopkg.in/yaml.v3 v3.0.0 // indirect
 )
 
 require (
