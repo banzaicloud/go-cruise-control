@@ -88,7 +88,7 @@ func (s *BrokerState) UnmarshalText(data []byte) error {
 type HostLoadStats struct {
 	FollowerNwInRate   float64 `json:"FollowerNwInRate"`
 	NwOutRate          float64 `json:"NwOutRate"`
-	NumCore            int32   `json:"NumCore"`
+	NumCore            float64 `json:"NumCore"`
 	Host               string  `json:"Host"`
 	CPUPct             float64 `json:"CpuPct"`
 	Replicas           int32   `json:"Replicas"`
