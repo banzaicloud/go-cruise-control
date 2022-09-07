@@ -72,7 +72,7 @@ func (r *GenericResponse) UnmarshalResponse(resp *http.Response) error {
 	r.CruiseControlVersion = resp.Header.Get(CruiseControlVersionHTTPHeader)
 	r.Date = resp.Header.Get(DateHTTPHeader)
 	r.StatusCode = resp.StatusCode
-	r.RequestURL = resp.Request.RequestURI
+	r.RequestURL = resp.Request.URL.String()
 	return nil
 }
 
