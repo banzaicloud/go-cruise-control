@@ -3,7 +3,7 @@
 It's client library (written in Golang) for interacting with
 [Linkedin Cruise Control](https://github.com/linkedin/cruise-control) using its HTTP API.
 
-Supported _Cruise Control_ versions: **2.5.x** (tested with v2.5.86)
+Supported _Cruise Control_ versions: **2.5.x-2.5.93** (tested with v2.5.86)
 
 ## How to use it
 
