@@ -61,15 +61,18 @@ type GenericResponse struct {
 	TaskID               string
 	CruiseControlVersion string
 	Date                 string
-
-	Progress *ProgressResult
-	Error    *APIError
+	StatusCode           int
+	RequestURL           string
+	Progress             *ProgressResult
+	Error                *APIError
 }
 
 func (r *GenericResponse) UnmarshalResponse(resp *http.Response) error {
 	r.TaskID = resp.Header.Get(UserTaskIDHTTPHeader)
 	r.CruiseControlVersion = resp.Header.Get(CruiseControlVersionHTTPHeader)
 	r.Date = resp.Header.Get(DateHTTPHeader)
+	r.StatusCode = resp.StatusCode
+	r.RequestURL = resp.Request.RequestURI
 	return nil
 }
 
