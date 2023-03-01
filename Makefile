@@ -36,6 +36,10 @@ integration-test: ## Run go integration test against code
  		-timeout 2h \
  		-ginkgo.v .
 
+go.work:
+	@go work init
+	@go work use . integration_test
+
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
 include makefile.d/*.mk
