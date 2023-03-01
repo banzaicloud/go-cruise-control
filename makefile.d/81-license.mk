@@ -1,6 +1,6 @@
 ##@ License
 
-LICENSEI_VERSION = 0.5.0
+LICENSEI_VERSION = 0.8.0
 
 bin/licensei: bin/licensei-$(LICENSEI_VERSION)
 	@ln -sf licensei-${LICENSEI_VERSION} bin/licensei

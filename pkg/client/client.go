@@ -25,9 +25,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/banzaicloud/go-cruise-control/pkg/types"
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
+
+	"github.com/banzaicloud/go-cruise-control/pkg/types"
 )
 
 const (
@@ -37,10 +38,11 @@ const (
 	DefaultRequestTimeout = 30 * time.Second
 )
 
+//nolint:containedctx
 type Client struct {
 	httpClient *http.Client
 	log        logr.Logger
-	ctx        context.Context
+	ctx        context.Context // FIXME(chrisgacsal): move ctx to method calls and do not store it in Client
 
 	url       *url.URL
 	auth      AuthInfo
