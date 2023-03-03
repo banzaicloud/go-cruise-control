@@ -53,7 +53,7 @@ linters:
     - govet
     - importas
     - ineffassign
-#    - ireturn # FIXME(chrisgacsal)
+    - ireturn
     - lll
     - loggercheck
     - maintidx
