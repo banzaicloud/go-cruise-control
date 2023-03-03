@@ -40,7 +40,7 @@ var _ = Describe("Proposals", Label("api:proposals", "api:state"), func() {
 			By("getting proposal from Cruise Control")
 			req := api.ProposalsRequestWithDefaults()
 			req.Reason = "integration testing"
-			resp, err := cruisecontrol.Proposals(req)
+			resp, err := cruisecontrol.Proposals(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 

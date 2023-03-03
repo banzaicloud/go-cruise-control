@@ -17,122 +17,120 @@ limitations under the License.
 package client
 
 import (
+	"context"
 	"net/http"
-	"time"
 
 	"github.com/banzaicloud/go-cruise-control/pkg/api"
 )
 
-const BoostrapRequestTimeout = 5 * time.Minute
-
-func (c *Client) AddBroker(r *api.AddBrokerRequest) (*api.AddBrokerResponse, error) {
+func (c *Client) AddBroker(ctx context.Context, r *api.AddBrokerRequest) (*api.AddBrokerResponse, error) {
 	resp := &api.AddBrokerResponse{}
-	return resp, c.request(r, resp, api.EndpointAddBroker, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointAddBroker, http.MethodPost)
 }
 
-func (c *Client) Admin(r *api.AdminRequest) (*api.AdminResponse, error) {
+func (c *Client) Admin(ctx context.Context, r *api.AdminRequest) (*api.AdminResponse, error) {
 	resp := &api.AdminResponse{}
-	return resp, c.request(r, resp, api.EndpointAdmin, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointAdmin, http.MethodPost)
 }
 
-func (c *Client) Bootstrap(r *api.BootstrapRequest) (*api.BootstrapResponse, error) {
+func (c *Client) Bootstrap(ctx context.Context, r *api.BootstrapRequest) (*api.BootstrapResponse, error) {
 	resp := &api.BootstrapResponse{}
-	return resp, c.request(r, resp, api.EndpointBootstrap, http.MethodGet, BoostrapRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointBootstrap, http.MethodGet)
 }
 
-func (c *Client) DemoteBroker(r *api.DemoteBrokerRequest) (*api.DemoteBrokerResponse, error) {
+func (c *Client) DemoteBroker(ctx context.Context, r *api.DemoteBrokerRequest) (*api.DemoteBrokerResponse, error) {
 	resp := &api.DemoteBrokerResponse{}
-	return resp, c.request(r, resp, api.EndpointDemoteBroker, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointDemoteBroker, http.MethodPost)
 }
 
-func (c *Client) FixOfflineReplicas(r *api.FixOfflineReplicasRequest) (*api.FixOfflineReplicasResponse, error) {
+func (c *Client) FixOfflineReplicas(ctx context.Context, r *api.FixOfflineReplicasRequest) (*api.FixOfflineReplicasResponse, error) {
 	resp := &api.FixOfflineReplicasResponse{}
-	return resp, c.request(r, resp, api.EndpointFixOfflineReplicas, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointFixOfflineReplicas, http.MethodPost)
 }
 
-func (c *Client) KafkaClusterLoad(r *api.KafkaClusterLoadRequest) (*api.KafkaClusterLoadResponse, error) {
+func (c *Client) KafkaClusterLoad(ctx context.Context, r *api.KafkaClusterLoadRequest) (*api.KafkaClusterLoadResponse, error) {
 	resp := &api.KafkaClusterLoadResponse{}
-	return resp, c.request(r, resp, api.EndpointKafkaClusterLoad, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointKafkaClusterLoad, http.MethodGet)
 }
 
-func (c *Client) KafkaClusterState(r *api.KafkaClusterStateRequest) (*api.KafkaClusterStateResponse, error) {
+func (c *Client) KafkaClusterState(ctx context.Context, r *api.KafkaClusterStateRequest) (*api.KafkaClusterStateResponse, error) {
 	resp := &api.KafkaClusterStateResponse{}
-	return resp, c.request(r, resp, api.EndpointKafkaClusterState, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointKafkaClusterState, http.MethodGet)
 }
 
-func (c *Client) KafkaPartitionLoad(r *api.KafkaPartitionLoadRequest) (*api.KafkaPartitionLoadResponse, error) {
+func (c *Client) KafkaPartitionLoad(ctx context.Context, r *api.KafkaPartitionLoadRequest) (*api.KafkaPartitionLoadResponse, error) {
 	resp := &api.KafkaPartitionLoadResponse{}
-	return resp, c.request(r, resp, api.EndpointKafkaPartitionLoad, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointKafkaPartitionLoad, http.MethodGet)
 }
 
-func (c *Client) PauseSampling(r *api.PauseSamplingRequest) (*api.PauseSamplingResponse, error) {
+func (c *Client) PauseSampling(ctx context.Context, r *api.PauseSamplingRequest) (*api.PauseSamplingResponse, error) {
 	resp := &api.PauseSamplingResponse{}
-	return resp, c.request(r, resp, api.EndpointPauseSampling, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointPauseSampling, http.MethodPost)
 }
 
-func (c *Client) Proposals(r *api.ProposalsRequest) (*api.ProposalsResponse, error) {
+func (c *Client) Proposals(ctx context.Context, r *api.ProposalsRequest) (*api.ProposalsResponse, error) {
 	resp := &api.ProposalsResponse{}
-	return resp, c.request(r, resp, api.EndpointProposals, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointProposals, http.MethodGet)
 }
 
-func (c *Client) Rebalance(r *api.RebalanceRequest) (*api.RebalanceResponse, error) {
+func (c *Client) Rebalance(ctx context.Context, r *api.RebalanceRequest) (*api.RebalanceResponse, error) {
 	resp := &api.RebalanceResponse{}
-	return resp, c.request(r, resp, api.EndpointRebalance, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointRebalance, http.MethodPost)
 }
 
-func (c *Client) RemoveBroker(r *api.RemoveBrokerRequest) (*api.RemoveBrokerResponse, error) {
+func (c *Client) RemoveBroker(ctx context.Context, r *api.RemoveBrokerRequest) (*api.RemoveBrokerResponse, error) {
 	resp := &api.RemoveBrokerResponse{}
-	return resp, c.request(r, resp, api.EndpointRemoveBroker, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointRemoveBroker, http.MethodPost)
 }
 
-func (c *Client) ResumeSampling(r *api.ResumeSamplingRequest) (*api.ResumeSamplingResponse, error) {
+func (c *Client) ResumeSampling(ctx context.Context, r *api.ResumeSamplingRequest) (*api.ResumeSamplingResponse, error) {
 	resp := &api.ResumeSamplingResponse{}
-	return resp, c.request(r, resp, api.EndpointResumeSampling, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointResumeSampling, http.MethodPost)
 }
 
-func (c *Client) Review(r *api.ReviewRequest) (*api.ReviewResponse, error) {
+func (c *Client) Review(ctx context.Context, r *api.ReviewRequest) (*api.ReviewResponse, error) {
 	resp := &api.ReviewResponse{}
-	return resp, c.request(r, resp, api.EndpointReview, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointReview, http.MethodPost)
 }
 
 // ReviewBoard returns a list of Cruise Control requests with their review state.
-func (c *Client) ReviewBoard(r *api.ReviewBoardRequest) (*api.ReviewBoardResponse, error) {
+func (c *Client) ReviewBoard(ctx context.Context, r *api.ReviewBoardRequest) (*api.ReviewBoardResponse, error) {
 	resp := &api.ReviewBoardResponse{}
-	return resp, c.request(r, resp, api.EndpointReviewBoard, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointReviewBoard, http.MethodGet)
 }
 
 // Rightsize allows manually invoke provisioner rightsizing of the cluster.
-func (c *Client) Rightsize(r *api.RightsizeRequest) (*api.RightsizeResponse, error) {
+func (c *Client) Rightsize(ctx context.Context, r *api.RightsizeRequest) (*api.RightsizeResponse, error) {
 	resp := &api.RightsizeResponse{}
-	return resp, c.request(r, resp, api.EndpointRightsize, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointRightsize, http.MethodPost)
 }
 
 // State reports back the Cruise Control state.
-func (c *Client) State(r *api.StateRequest) (*api.StateResponse, error) {
+func (c *Client) State(ctx context.Context, r *api.StateRequest) (*api.StateResponse, error) {
 	resp := &api.StateResponse{}
-	return resp, c.request(r, resp, api.EndpointState, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointState, http.MethodGet)
 }
 
 // StopProposalExecution invoke stopping of ongoing proposal execution in Cruise Control.
-func (c *Client) StopProposalExecution(r *api.StopProposalExecutionRequest) (*api.StopProposalExecutionResponse, error) { //nolint:lll
+func (c *Client) StopProposalExecution(ctx context.Context, r *api.StopProposalExecutionRequest) (*api.StopProposalExecutionResponse, error) { //nolint:lll
 	resp := &api.StopProposalExecutionResponse{}
-	return resp, c.request(r, resp, api.EndpointStopProposalExecution, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointStopProposalExecution, http.MethodPost)
 }
 
 // TopicConfiguration allows changing Kafka topic configuration using Cruise Control.
-func (c *Client) TopicConfiguration(r *api.TopicConfigurationRequest) (*api.TopicConfigurationResponse, error) {
+func (c *Client) TopicConfiguration(ctx context.Context, r *api.TopicConfigurationRequest) (*api.TopicConfigurationResponse, error) {
 	resp := &api.TopicConfigurationResponse{}
-	return resp, c.request(r, resp, api.EndpointTopicConfiguration, http.MethodPost, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointTopicConfiguration, http.MethodPost)
 }
 
 // Train Cruise Control to better model broker cpu usage.
-func (c *Client) Train(r *api.TrainRequest) (*api.TrainResponse, error) {
+func (c *Client) Train(ctx context.Context, r *api.TrainRequest) (*api.TrainResponse, error) {
 	resp := &api.TrainResponse{}
-	return resp, c.request(r, resp, api.EndpointTrain, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointTrain, http.MethodGet)
 }
 
 // UserTasks returns the list of recent tasks performed by Cruise Control.
-func (c *Client) UserTasks(r *api.UserTasksRequest) (*api.UserTasksResponse, error) {
+func (c *Client) UserTasks(ctx context.Context, r *api.UserTasksRequest) (*api.UserTasksResponse, error) {
 	resp := &api.UserTasksResponse{}
-	return resp, c.request(r, resp, api.EndpointUserTasks, http.MethodGet, DefaultRequestTimeout)
+	return resp, c.request(ctx, r, resp, api.EndpointUserTasks, http.MethodGet)
 }

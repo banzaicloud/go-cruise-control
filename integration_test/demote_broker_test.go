@@ -47,7 +47,7 @@ var _ = Describe("Demote Broker",
 			By("re-balancing the Kafka cluster")
 			req := api.RebalanceRequestWithDefaults()
 			req.DryRun = false
-			resp, err := cruisecontrol.Rebalance(req)
+			resp, err := cruisecontrol.Rebalance(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 		})
@@ -61,7 +61,7 @@ var _ = Describe("Demote Broker",
 					req.Reason = "integration testing"
 					req.DryRun = false
 
-					resp, err := cruisecontrol.DemoteBroker(req)
+					resp, err := cruisecontrol.DemoteBroker(ctx, req)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp.Failed()).To(BeFalse())
 
@@ -77,7 +77,7 @@ var _ = Describe("Demote Broker",
 						req2 := api.KafkaClusterStateRequestWithDefaults()
 						req2.Reason = "integration testing"
 
-						resp2, err := cruisecontrol.KafkaClusterState(req2)
+						resp2, err := cruisecontrol.KafkaClusterState(ctx, req2)
 						Expect(err).NotTo(HaveOccurred())
 						Expect(resp2.Failed()).To(BeFalse())
 

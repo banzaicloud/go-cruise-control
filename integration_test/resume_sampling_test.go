@@ -41,7 +41,7 @@ var _ = Describe("Resume Sampling", Label("api:pause_sampling", "api:resume_samp
 				By("pausing sampling")
 				req := api.PauseSamplingRequestWithDefaults()
 				req.Reason = "integration testing"
-				resp, err := cruisecontrol.PauseSampling(req)
+				resp, err := cruisecontrol.PauseSampling(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 
@@ -52,7 +52,7 @@ var _ = Describe("Resume Sampling", Label("api:pause_sampling", "api:resume_samp
 						types.SubstateMonitor,
 					}
 
-					resp2, err := cruisecontrol.State(req2)
+					resp2, err := cruisecontrol.State(ctx, req2)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp2.Failed()).To(BeFalse())
 					state := resp2.Result.MonitorState.State
@@ -64,7 +64,7 @@ var _ = Describe("Resume Sampling", Label("api:pause_sampling", "api:resume_samp
 				By("resuming metric sampling Cruise Control")
 				req2 := api.ResumeSamplingRequestWithDefaults()
 				req2.Reason = "integration testing"
-				resp2, err := cruisecontrol.ResumeSampling(req2)
+				resp2, err := cruisecontrol.ResumeSampling(ctx, req2)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp2.Failed()).To(BeFalse())
 
@@ -75,7 +75,7 @@ var _ = Describe("Resume Sampling", Label("api:pause_sampling", "api:resume_samp
 						types.SubstateMonitor,
 					}
 
-					resp3, err := cruisecontrol.State(req3)
+					resp3, err := cruisecontrol.State(ctx, req3)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp3.Failed()).To(BeFalse())
 					state := resp3.Result.MonitorState.State

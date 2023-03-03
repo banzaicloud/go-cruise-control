@@ -118,4 +118,6 @@ linters-settings:
       - commentFormatting
   goimports:
     local-prefixes: github.com/banzaicloud
+  lll:
+    line-length: 135
 

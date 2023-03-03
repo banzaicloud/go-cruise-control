@@ -23,7 +23,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
@@ -34,33 +33,22 @@ import (
 const (
 	DefaultServerURL = "http://localhost:8090/kafkacruisecontrol"
 	DefaultUserAgent = "go-cruise-control"
-
-	DefaultRequestTimeout = 30 * time.Second
 )
 
-//nolint:containedctx
 type Client struct {
 	httpClient *http.Client
-	log        logr.Logger
-	ctx        context.Context // FIXME(chrisgacsal): move ctx to method calls and do not store it in Client
-
-	url       *url.URL
-	auth      AuthInfo
-	userAgent string
-}
-
-func (c *Client) Context() context.Context {
-	if c.ctx != nil {
-		return c.ctx
-	}
-	return context.Background()
+	url        *url.URL
+	auth       AuthInfo
+	userAgent  string
 }
 
 func (c Client) String() string {
 	return fmt.Sprintf("CruiseControlClient\n\turl: %s\n\tuseragent: %s\n", c.url, c.userAgent)
 }
 
-func (c Client) send(req *http.Request, opts ...RequestOptions) (*http.Response, error) {
+func (c Client) send(ctx context.Context, req *http.Request, opts ...RequestOptions) (*http.Response, error) {
+	log := logr.FromContextOrDiscard(ctx)
+
 	opts = append(opts, []RequestOptions{
 		WithServerURL(c.url),
 		WithAuthInfo(c.auth),
@@ -75,18 +63,17 @@ func (c Client) send(req *http.Request, opts ...RequestOptions) (*http.Response,
 			return nil, err
 		}
 	}
-	c.log.V(-1).Info("sending request", "url", req.URL, "method", req.Method)
+	log.V(-1).Info("sending request", "url", req.URL, "method", req.Method)
 	return c.httpClient.Do(req)
 }
 
-func (c Client) request(req interface{}, resp types.APIResponse, e types.APIEndpoint, m string, t time.Duration) error {
+func (c Client) request(ctx context.Context, req interface{}, resp types.APIResponse, e types.APIEndpoint, m string) error {
+	log := logr.FromContextOrDiscard(ctx)
+
 	r, err := MarshalRequest(req)
 	if err != nil {
 		return err
 	}
-
-	ctx, cancel := context.WithTimeout(c.Context(), t)
-	defer cancel()
 
 	opts := []RequestOptions{
 		WithEndpoint(e),
@@ -94,18 +81,18 @@ func (c Client) request(req interface{}, resp types.APIResponse, e types.APIEndp
 		WithContext(ctx),
 	}
 
-	httpResp, err := c.send(r, opts...)
+	httpResp, err := c.send(ctx, r, opts...)
 	if err != nil {
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			c.log.V(-1).Info("failed to close response body for request", "url", httpResp.Request.URL)
+			log.V(-1).Info("failed to close response body for request", "url", httpResp.Request.URL)
 		}
 	}(httpResp.Body)
 
-	c.log.V(0).Info("got response for request", "url", httpResp.Request.URL,
+	log.V(0).Info("got response for request", "url", httpResp.Request.URL,
 		"status", httpResp.StatusCode)
 
 	contentType := parseContentType(httpResp.Header.Get(HTTPHeaderContentType))
@@ -126,12 +113,10 @@ func (c Client) request(req interface{}, resp types.APIResponse, e types.APIEndp
 
 // NewClient returns a new API client with the provided configuration. It returns an error if the configuration
 // is invalid.
-func NewClient(ctx context.Context, opts *Config) (*Client, error) {
+func NewClient(opts *Config) (*Client, error) {
 	var err error
 
 	client := &Client{}
-	client.ctx = ctx
-	client.log = logr.FromContextOrDiscard(ctx)
 
 	// NOTE: user task caching does not work properly on Cruise Control end as it returns stalled responses.
 	// jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
@@ -185,7 +170,7 @@ func NewClient(ctx context.Context, opts *Config) (*Client, error) {
 // NewDefaultClient return a new API client with default configuration. It returns an error if the configuration
 // is invalid.
 func NewDefaultClient() (*Client, error) {
-	return NewClient(context.Background(), &Config{
+	return NewClient(&Config{
 		ServerURL: DefaultServerURL,
 		AuthType:  AuthTypeNone,
 		UserAgent: DefaultUserAgent,

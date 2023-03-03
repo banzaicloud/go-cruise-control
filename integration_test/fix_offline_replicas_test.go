@@ -52,7 +52,7 @@ var _ = Describe("Fix Offline Replicas",
 			By("waiting until Cruise Control detects the offline broker")
 			req2 := api.KafkaClusterLoadRequestWithDefaults()
 			Eventually(func() bool {
-				resp, err := cruisecontrol.KafkaClusterLoad(req2)
+				resp, err := cruisecontrol.KafkaClusterLoad(ctx, req2)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 				var offlineBrokerStats *types.BrokerLoadStats
@@ -76,7 +76,7 @@ var _ = Describe("Fix Offline Replicas",
 			By("waiting until Cruise Control detects that the broker is online")
 			req := api.KafkaClusterLoadRequestWithDefaults()
 			Eventually(func() bool {
-				resp, err := cruisecontrol.KafkaClusterLoad(req)
+				resp, err := cruisecontrol.KafkaClusterLoad(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 				var offlineBroker *types.BrokerLoadStats
@@ -96,7 +96,7 @@ var _ = Describe("Fix Offline Replicas",
 			By("rebalancing the Kafka cluster")
 			req2 := api.RebalanceRequestWithDefaults()
 			req2.DryRun = false
-			resp2, err := cruisecontrol.Rebalance(req2)
+			resp2, err := cruisecontrol.Rebalance(ctx, req2)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp2.Failed()).To(BeFalse())
 		})
@@ -106,7 +106,7 @@ var _ = Describe("Fix Offline Replicas",
 				It("should return no error", func() {
 					By("checking if there are offline replicas in the cluster")
 					req := api.KafkaClusterStateRequestWithDefaults()
-					resp, err := cruisecontrol.KafkaClusterState(req)
+					resp, err := cruisecontrol.KafkaClusterState(ctx, req)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp.Failed()).To(BeFalse())
 					state := resp.Result.KafkaPartitionState
@@ -118,13 +118,13 @@ var _ = Describe("Fix Offline Replicas",
 					req2 := api.FixOfflineReplicasRequestWithDefaults()
 					req2.Reason = "integration testing"
 					req2.DryRun = false
-					resp2, err := cruisecontrol.FixOfflineReplicas(req2)
+					resp2, err := cruisecontrol.FixOfflineReplicas(ctx, req2)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp2.Failed()).To(BeFalse())
 
 					By("waiting until Cruise Control fixes all the offline replicas")
 					Eventually(func() bool {
-						resp, err := cruisecontrol.KafkaClusterState(req)
+						resp, err := cruisecontrol.KafkaClusterState(ctx, req)
 						Expect(err).NotTo(HaveOccurred())
 						Expect(resp.Failed()).To(BeFalse())
 						state := resp.Result.KafkaPartitionState

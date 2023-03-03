@@ -96,7 +96,7 @@ var _ = BeforeSuite(func() {
 	cfg := &client.Config{
 		ServerURL: u.String(),
 	}
-	cruisecontrol, err = client.NewClient(ctx, cfg)
+	cruisecontrol, err = client.NewClient(cfg)
 	Expect(err).NotTo(HaveOccurred())
 
 	By("waiting until Cruise Control is ready")

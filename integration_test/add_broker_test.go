@@ -41,7 +41,7 @@ var _ = Describe("Add Broker", Label("api:add_broker", "api:state"), Serial, fun
 
 		By("getting list of ready goals")
 		req := api.StateRequestWithDefaults()
-		resp, err := cruisecontrol.State(req)
+		resp, err := cruisecontrol.State(ctx, req)
 		Expect(err).NotTo(HaveOccurred())
 		Expect(resp.Failed()).To(BeFalse())
 		readyGoals = resp.Result.AnalyzerState.ReadyGoals
@@ -56,7 +56,7 @@ var _ = Describe("Add Broker", Label("api:add_broker", "api:state"), Serial, fun
 				req.Reason = "integration testing"
 				req.DryRun = false
 
-				resp, err := cruisecontrol.AddBroker(req)
+				resp, err := cruisecontrol.AddBroker(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 			})
@@ -71,7 +71,7 @@ var _ = Describe("Add Broker", Label("api:add_broker", "api:state"), Serial, fun
 				req.Reason = "integration testing"
 				req.DryRun = false
 
-				resp, err := cruisecontrol.AddBroker(req)
+				resp, err := cruisecontrol.AddBroker(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 			})
