@@ -450,3 +450,11 @@ FodyWeavers.xsd
 tmp
 .licensei.cache
 cover.out
+
+# Exclude Go workspace
+go.work
+go.work.sum
+
+# Checkstyle
+report.xml
+report.json

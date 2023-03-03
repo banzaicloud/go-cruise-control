@@ -104,7 +104,7 @@ func TestParseStructTagFlag(t *testing.T) {
 
 		stf, err := ParseStructTagFlag("omitempty")
 
-		g.Expect(err).Should(BeNil(),
+		g.Expect(err).ShouldNot(HaveOccurred(),
 			"Parsing a non-empty struct tag flag string should not return an error!")
 
 		g.Expect(stf).Should(Equal(expected), "Mismatch in expected and returned StructTagFlag!")
@@ -120,7 +120,7 @@ func TestParseStructTagFlag(t *testing.T) {
 
 		stf, err := ParseStructTagFlag("default=default value")
 
-		g.Expect(err).Should(BeNil(),
+		g.Expect(err).ShouldNot(HaveOccurred(),
 			"Parsing a non-empty struct tag flag string should not return an error!")
 
 		g.Expect(stf).Should(Equal(expected), "Mismatch in expected and returned StructTagFlag!")
@@ -146,7 +146,7 @@ func TestParseStructTag(t *testing.T) {
 
 		st, err := ParseStructTag("testTag")
 
-		g.Expect(err).Should(BeNil(),
+		g.Expect(err).ShouldNot(HaveOccurred(),
 			"Parsing a non-empty struct tag string should not return an error!")
 
 		g.Expect(st).Should(Equal(expected), "Mismatch in expected and returned StructTag!")
@@ -162,7 +162,7 @@ func TestParseStructTag(t *testing.T) {
 
 		st, err := ParseStructTag("testTag,omitempty")
 
-		g.Expect(err).Should(BeNil(),
+		g.Expect(err).ShouldNot(HaveOccurred(),
 			"Parsing a valid struct tag string should not return an error!")
 
 		g.Expect(st).Should(Equal(expected), "Mismatch in expected and returned StructTag!")

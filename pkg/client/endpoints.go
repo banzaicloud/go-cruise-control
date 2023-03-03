@@ -23,6 +23,8 @@ import (
 	"github.com/banzaicloud/go-cruise-control/pkg/api"
 )
 
+const BoostrapRequestTimeout = 5 * time.Minute
+
 func (c *Client) AddBroker(r *api.AddBrokerRequest) (*api.AddBrokerResponse, error) {
 	resp := &api.AddBrokerResponse{}
 	return resp, c.request(r, resp, api.EndpointAddBroker, http.MethodPost, DefaultRequestTimeout)
@@ -35,7 +37,7 @@ func (c *Client) Admin(r *api.AdminRequest) (*api.AdminResponse, error) {
 
 func (c *Client) Bootstrap(r *api.BootstrapRequest) (*api.BootstrapResponse, error) {
 	resp := &api.BootstrapResponse{}
-	return resp, c.request(r, resp, api.EndpointBootstrap, http.MethodGet, 5*time.Minute)
+	return resp, c.request(r, resp, api.EndpointBootstrap, http.MethodGet, BoostrapRequestTimeout)
 }
 
 func (c *Client) DemoteBroker(r *api.DemoteBrokerRequest) (*api.DemoteBrokerResponse, error) {
@@ -112,7 +114,7 @@ func (c *Client) State(r *api.StateRequest) (*api.StateResponse, error) {
 }
 
 // StopProposalExecution invoke stopping of ongoing proposal execution in Cruise Control.
-func (c *Client) StopProposalExecution(r *api.StopProposalExecutionRequest) (*api.StopProposalExecutionResponse, error) {
+func (c *Client) StopProposalExecution(r *api.StopProposalExecutionRequest) (*api.StopProposalExecutionResponse, error) { //nolint:lll
 	resp := &api.StopProposalExecutionResponse{}
 	return resp, c.request(r, resp, api.EndpointStopProposalExecution, http.MethodPost, DefaultRequestTimeout)
 }

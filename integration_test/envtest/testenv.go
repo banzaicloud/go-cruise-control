@@ -20,14 +20,15 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/compose-spec/compose-go/cli"
 	"github.com/compose-spec/compose-go/types"
-	"github.com/docker/cli/cli/config"
+	"github.com/docker/cli/cli/command"
+	cliflags "github.com/docker/cli/cli/flags"
 	"github.com/docker/compose/v2/pkg/api"
 	"github.com/docker/compose/v2/pkg/compose"
-	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
 )
 
@@ -49,14 +50,20 @@ func (e *Environment) Start() error {
 	if e.reuse {
 		return nil
 	}
+	timeout := 1 * time.Minute
 	opts := api.UpOptions{
 		Create: api.CreateOptions{
 			RemoveOrphans: true,
 			QuietPull:     true,
+			Timeout:       &timeout,
+			Services:      e.Services(),
+			Inherit:       false,
 		},
 		Start: api.StartOptions{
-			// Attach: formatter.NewLogConsumer(ctx, os.Stdout, false, false),
-			Wait: true,
+			Project:     e.project,
+			Wait:        true,
+			WaitTimeout: 2 * time.Minute,
+			Services:    e.Services(),
 		},
 	}
 	return e.composer.Up(e.ctx, e.project, opts)
@@ -66,56 +73,55 @@ func (e *Environment) Stop() error {
 	if e.reuse {
 		return nil
 	}
-	opts := api.DownOptions{
+	timeout := 1 * time.Minute
+	downOpts := api.DownOptions{
 		RemoveOrphans: true,
 		Project:       e.project,
 		Volumes:       true,
+		Timeout:       &timeout,
 	}
-	return e.composer.Down(e.ctx, e.project.Name, opts)
+	return e.composer.Down(e.ctx, e.project.Name, downOpts)
 }
 
 func (e *Environment) StartService(service string) error {
 	services := []string{service}
-	ps, err := e.composer.Ps(e.ctx, e.project.Name, api.PsOptions{Services: services})
+	ps, err := e.composer.Ps(e.ctx, e.project.Name, api.PsOptions{Services: services, Project: e.project})
 	if err != nil {
 		return err
 	}
-	if len(ps) == 1 && ps[0].State == "running" {
+	if len(ps) == 1 && ps[0].State == stateRunning {
 		return nil
 	}
 
-	timeout := 5 * time.Second
-	opts := api.RestartOptions{
-		Timeout:  &timeout,
-		Services: services,
+	opts := api.StartOptions{
+		Project:     e.project,
+		Wait:        true,
+		WaitTimeout: 2 * time.Minute,
+		Services:    services,
 	}
-	return e.composer.Restart(e.ctx, e.project, opts)
+	return e.composer.Start(e.ctx, e.project.Name, opts)
 }
 
 func (e *Environment) StopService(service string) error {
-	timeout := 5 * time.Second
+	timeout := 1 * time.Minute
 	opts := api.StopOptions{
 		Timeout:  &timeout,
 		Services: []string{service},
+		Project:  e.project,
 	}
-
-	return e.composer.Stop(e.ctx, e.project, opts)
+	return e.composer.Stop(e.ctx, e.project.Name, opts)
 }
 
-func (e Environment) Ready() (bool, error) {
-	services := make([]string, len(e.project.Services))
-	for i, srv := range e.project.Services {
-		services[i] = srv.Name
-	}
+func (e *Environment) Ready() (bool, error) {
+	services := e.Services()
 
-	ps, err := e.composer.Ps(e.ctx, e.project.Name, api.PsOptions{Services: services})
+	ps, err := e.composer.Ps(e.ctx, e.project.Name, api.PsOptions{Services: services, Project: e.project})
 	if err != nil {
 		return false, err
 	}
 
 	if len(services) != len(ps) {
-		return false, errors.Errorf("there are missing containers in the environment. expected %d, got %d\n",
-			len(services), len(ps))
+		return false, nil
 	}
 
 	for _, c := range ps {
@@ -126,7 +132,7 @@ func (e Environment) Ready() (bool, error) {
 	return true, nil
 }
 
-func (e Environment) CruiseControlURL() (*url.URL, error) {
+func (e *Environment) CruiseControlURL() (*url.URL, error) {
 	var cruiseControl types.ServiceConfig
 	var ok bool
 
@@ -154,30 +160,50 @@ func (e Environment) CruiseControlURL() (*url.URL, error) {
 
 	return &url.URL{
 		Scheme: "http",
-		Host:   fmt.Sprintf("%s:%d", hostIP, port),
+		Host:   fmt.Sprintf("%s:%s", hostIP, port),
 		Path:   "kafkacruisecontrol",
 	}, nil
 }
 
+func (e *Environment) Services() []string {
+	services := make([]string, len(e.project.Services))
+	for i, srv := range e.project.Services {
+		services[i] = srv.Name
+	}
+	return services
+}
+
 func New(ctx context.Context, o *cli.ProjectOptions, reuse bool) (*Environment, error) {
-	dockerClient, err := client.NewClientWithOpts(client.FromEnv)
-	if err != nil {
-		return nil, err
-	}
-
-	dockerConfig, err := config.Load(config.Dir())
-	if err != nil {
-		return nil, err
-	}
-
 	project, err := cli.ProjectFromOptions(o)
 	if err != nil {
 		return nil, err
 	}
 
+	for i, service := range project.Services {
+		service.CustomLabels = map[string]string{
+			api.ProjectLabel:     project.Name,
+			api.ServiceLabel:     service.Name,
+			api.WorkingDirLabel:  project.WorkingDir,
+			api.ConfigFilesLabel: strings.Join(project.ComposeFiles, ","),
+			api.OneoffLabel:      "False",
+		}
+		project.Services[i] = service
+	}
+
+	cmd, err := command.NewDockerCli()
+	if err != nil {
+		return nil, err
+	}
+
+	opts := cliflags.NewClientOptions()
+
+	if err = cmd.Initialize(opts); err != nil {
+		return nil, err
+	}
+
 	return &Environment{
 		ctx:      ctx,
-		composer: compose.NewComposeService(dockerClient, dockerConfig),
+		composer: compose.NewComposeService(cmd),
 		project:  project,
 		reuse:    reuse,
 	}, nil
