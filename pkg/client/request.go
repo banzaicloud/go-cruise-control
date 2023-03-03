@@ -27,14 +27,14 @@ import (
 	"github.com/banzaicloud/go-cruise-control/pkg/internal/encoder"
 )
 
-var marshalerType = reflect.TypeOf((*RequestMarshaler)(nil)).Elem()
-
 // RequestMarshaler is the interface implemented by types that can marshal themselves into valid http.Request
 type RequestMarshaler interface {
 	MarshalRequest() (*http.Request, error)
 }
 
 func MarshalRequest(v interface{}) (*http.Request, error) {
+	marshalerType := reflect.TypeOf((*RequestMarshaler)(nil)).Elem()
+
 	// Get the Value of the v interface
 	vValue := reflect.Indirect(reflect.ValueOf(v))
 

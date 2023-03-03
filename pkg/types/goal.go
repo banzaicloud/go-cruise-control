@@ -40,29 +40,6 @@ const (
 	TopicReplicaDistributionGoal
 )
 
-var AllSupportedGoals = []Goal{
-	CPUCapacityGoal,
-	CPUUsageDistributionGoal,
-	DiskCapacityGoal,
-	DiskUsageDistributionGoal,
-	IntraBrokerDiskCapacityGoal,
-	IntraBrokerDiskUsageDistributionGoal,
-	LeaderBytesInDistributionGoal,
-	LeaderReplicaDistributionGoal,
-	MinTopicLeadersPerBrokerGoal,
-	NetworkInboundCapacityGoal,
-	NetworkInboundUsageDistributionGoal,
-	NetworkOutboundCapacityGoal,
-	NetworkOutboundUsageDistributionGoal,
-	PotentialNwOutGoal,
-	PreferredLeaderElectionGoal,
-	RackAwareDistributionGoal,
-	RackAwareGoal,
-	ReplicaCapacityGoal,
-	ReplicaDistributionGoal,
-	TopicReplicaDistributionGoal,
-}
-
 type Goal int8
 
 func (g Goal) String() string {
@@ -171,4 +148,29 @@ func (g *Goal) UnmarshalJSON(data []byte) error {
 
 func (g *Goal) UnmarshalText(data []byte) error {
 	return g.UnmarshalJSON(data)
+}
+
+func (g Goal) All() []Goal {
+	return []Goal{
+		CPUCapacityGoal,
+		CPUUsageDistributionGoal,
+		DiskCapacityGoal,
+		DiskUsageDistributionGoal,
+		IntraBrokerDiskCapacityGoal,
+		IntraBrokerDiskUsageDistributionGoal,
+		LeaderBytesInDistributionGoal,
+		LeaderReplicaDistributionGoal,
+		MinTopicLeadersPerBrokerGoal,
+		NetworkInboundCapacityGoal,
+		NetworkInboundUsageDistributionGoal,
+		NetworkOutboundCapacityGoal,
+		NetworkOutboundUsageDistributionGoal,
+		PotentialNwOutGoal,
+		PreferredLeaderElectionGoal,
+		RackAwareDistributionGoal,
+		RackAwareGoal,
+		ReplicaCapacityGoal,
+		ReplicaDistributionGoal,
+		TopicReplicaDistributionGoal,
+	}
 }

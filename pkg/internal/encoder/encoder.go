@@ -30,11 +30,6 @@ const (
 	rootParamKey        = "_"
 )
 
-var (
-	paramsMarshalerType = reflect.TypeOf((*ParamsMarshaler)(nil)).Elem()
-	stringerType        = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
-)
-
 type ParamsMarshaler interface {
 	MarshalParams(key string) (types.Params, error)
 }
@@ -105,6 +100,8 @@ func MarshalParams(v interface{}) (types.Params, error) {
 }
 
 func newTypeEncoder(t reflect.Type) encoderFunc {
+	paramsMarshalerType := reflect.TypeOf((*ParamsMarshaler)(nil)).Elem()
+
 	if t.Implements(paramsMarshalerType) {
 		return marshalerEncoder
 	}
@@ -140,6 +137,8 @@ func newTypeEncoder(t reflect.Type) encoderFunc {
 }
 
 func marshalerEncoder(s *encoderState, v reflect.Value, o encoderOptions) error {
+	paramsMarshalerType := reflect.TypeOf((*ParamsMarshaler)(nil)).Elem()
+
 	if v.Kind() == reflect.Ptr && v.IsNil() {
 		if o.OmitEmpty {
 			return nil
@@ -254,6 +253,9 @@ func newArrayEncoder(t reflect.Type) encoderFunc {
 }
 
 func newSliceEncoder(t reflect.Type) encoderFunc {
+	paramsMarshalerType := reflect.TypeOf((*ParamsMarshaler)(nil)).Elem()
+	stringerType := reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+
 	if t.Elem().Kind() == reflect.Uint8 {
 		p := reflect.PtrTo(t.Elem())
 		if !p.Implements(paramsMarshalerType) && !p.Implements(stringerType) {
@@ -291,6 +293,8 @@ func (e *sliceEncoder) encode(s *encoderState, v reflect.Value, o encoderOptions
 }
 
 func newMapEncoder(t reflect.Type) encoderFunc {
+	stringerType := reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+
 	switch t.Key().Kind() { //nolint:exhaustive
 	case reflect.String,
 		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
