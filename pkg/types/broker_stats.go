@@ -17,6 +17,7 @@ limitations under the License.
 package types
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -152,7 +153,7 @@ func (s *DiskUsageStat) UnmarshalJSON(data []byte) error {
 		var err error
 		s.Usage, err = strconv.ParseFloat(d, 64) //nolint:gomnd
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to parse disk usage: %w", err)
 		}
 	}
 	return nil

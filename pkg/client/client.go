@@ -60,11 +60,16 @@ func (c Client) send(ctx context.Context, req *http.Request, opts ...RequestOpti
 
 	for _, o := range opts {
 		if err := o.apply(req); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to apply option(s) to HTTP request: %w", err)
 		}
 	}
 	log.V(-1).Info("sending request", "url", req.URL, "method", req.Method)
-	return c.httpClient.Do(req)
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		err = fmt.Errorf("sending HTTP request failed: %w", err)
+	}
+	return resp, err
 }
 
 func (c Client) request(ctx context.Context, req interface{}, resp types.APIResponse, e types.APIEndpoint, m string) error {
@@ -102,11 +107,11 @@ func (c Client) request(ctx context.Context, req interface{}, resp types.APIResp
 	}
 
 	if err = resp.UnmarshalResponse(httpResp); err != nil {
-		return err
+		return fmt.Errorf("failed to convert HTTP response to API response: %w", err)
 	}
 
 	if resp.Failed() {
-		return resp.Err()
+		return fmt.Errorf("HTTP request failed: %w", resp.Err())
 	}
 	return nil
 }
@@ -140,7 +145,7 @@ func NewClient(opts *Config) (*Client, error) {
 		serverURL += "/"
 	}
 	if client.url, err = url.Parse(serverURL); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to parse Cruise Control server URL: %w", err)
 	}
 
 	switch opts.AuthType {

@@ -47,7 +47,11 @@ func (c RequestOptionApplier) apply(r *http.Request) error {
 func WithAuthInfo(a AuthInfo) RequestOptionApplier {
 	return func(r *http.Request) error {
 		if a != nil {
-			return a.Apply(r)
+			err := a.Apply(r)
+			if err != nil {
+				return fmt.Errorf("failed to set authentication information to HTTP request: %w", err)
+			}
+			return nil
 		}
 		return nil
 	}
@@ -111,7 +115,7 @@ func WithJSONQuery() RequestOptionApplier {
 		}
 		q, err := url.ParseQuery(r.URL.RawQuery)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to apply JSON query parameter to HTTP request: %w", err)
 		}
 		q.Set("json", "true")
 		r.URL.RawQuery = q.Encode()

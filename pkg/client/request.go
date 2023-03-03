@@ -17,6 +17,7 @@ limitations under the License.
 package client
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -55,7 +56,12 @@ func MarshalRequest(v interface{}) (*http.Request, error) {
 		if !ok {
 			return nil, errors.Errorf("request: could not cast to %s", marshalerType)
 		}
-		return u.MarshalRequest()
+
+		req, err := u.MarshalRequest()
+		if err != nil {
+			err = fmt.Errorf("failed to encode API request to HTTP request: %w", err)
+		}
+		return req, err
 	}
 
 	return marshal(v)
@@ -64,7 +70,7 @@ func MarshalRequest(v interface{}) (*http.Request, error) {
 func marshal(v interface{}) (*http.Request, error) {
 	p, err := encoder.MarshalParams(v)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to encode API request to HTTP query parameters: %w", err)
 	}
 
 	for pKey, pValue := range p {

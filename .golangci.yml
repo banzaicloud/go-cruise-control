@@ -80,7 +80,7 @@ linters:
     - unused
     - usestdlibvars
     - whitespace
-#    - wrapcheck # FIXME(chrisgacsal)
+    - wrapcheck
 
 linters-settings:
   cyclop:
