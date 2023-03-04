@@ -1,3 +1,6 @@
+[![CI](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/banzaicloud/go-cruise-control)
+
 # go-cruise-control
 
 It's client library (written in Golang) for interacting with
