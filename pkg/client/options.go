@@ -38,23 +38,27 @@ type RequestOptions interface {
 	apply(*http.Request) error
 }
 
-type requestOptionApplier func(*http.Request) error
+type RequestOptionApplier func(*http.Request) error
 
-func (c requestOptionApplier) apply(r *http.Request) error {
+func (c RequestOptionApplier) apply(r *http.Request) error {
 	return c(r)
 }
 
-func WithAuthInfo(a AuthInfo) RequestOptions {
-	return requestOptionApplier(func(r *http.Request) error {
+func WithAuthInfo(a AuthInfo) RequestOptionApplier {
+	return func(r *http.Request) error {
 		if a != nil {
-			return a.Apply(r)
+			err := a.Apply(r)
+			if err != nil {
+				return fmt.Errorf("failed to set authentication information to HTTP request: %w", err)
+			}
+			return nil
 		}
 		return nil
-	})
+	}
 }
 
-func WithServerURL(u *url.URL) RequestOptions {
-	return requestOptionApplier(func(r *http.Request) error {
+func WithServerURL(u *url.URL) RequestOptionApplier {
+	return func(r *http.Request) error {
 		if r.URL == nil {
 			r.URL = &url.URL{}
 		}
@@ -62,28 +66,28 @@ func WithServerURL(u *url.URL) RequestOptions {
 		reqURL := baseURL.ResolveReference(r.URL)
 		r.URL = reqURL
 		return nil
-	})
+	}
 }
 
-func WithEndpoint(endpoint types.APIEndpoint) RequestOptions {
-	return requestOptionApplier(func(r *http.Request) error {
+func WithEndpoint(endpoint types.APIEndpoint) RequestOptionApplier {
+	return func(r *http.Request) error {
 		if r.URL == nil {
 			r.URL = &url.URL{}
 		}
 		r.URL.Path = path.Join(r.URL.Path, endpoint.Path())
 		return nil
-	})
+	}
 }
 
-func WithMethod(m string) RequestOptions {
-	return requestOptionApplier(func(r *http.Request) error {
+func WithMethod(m string) RequestOptionApplier {
+	return func(r *http.Request) error {
 		r.Method = m
 		return nil
-	})
+	}
 }
 
-func WithHeader(h string, v string) RequestOptions {
-	return requestOptionApplier(func(r *http.Request) error {
+func WithHeader(h string, v string) RequestOptionApplier {
+	return RequestOptionApplier(func(r *http.Request) error {
 		if r.Header == nil {
 			r.Header = make(http.Header)
 		}
@@ -92,37 +96,37 @@ func WithHeader(h string, v string) RequestOptions {
 	})
 }
 
-func WithUserAgent(agent string) RequestOptions {
+func WithUserAgent(agent string) RequestOptionApplier {
 	return WithHeader(HTTPHeaderUserAgent, agent)
 }
 
-func WithAcceptJSON() RequestOptions {
+func WithAcceptJSON() RequestOptionApplier {
 	return WithHeader(HTTPHeaderAccept, MIMETypeJSON)
 }
 
-func WithContentTypeJSON() RequestOptions {
+func WithContentTypeJSON() RequestOptionApplier {
 	return WithHeader(HTTPHeaderContentType, fmt.Sprintf("%s; charset=%s", MIMETypeJSON, ChartSetUTF8))
 }
 
-func WithJSONQuery() RequestOptions {
-	return requestOptionApplier(func(r *http.Request) error {
+func WithJSONQuery() RequestOptionApplier {
+	return func(r *http.Request) error {
 		if r.URL == nil {
 			r.URL = &url.URL{}
 		}
 		q, err := url.ParseQuery(r.URL.RawQuery)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to apply JSON query parameter to HTTP request: %w", err)
 		}
 		q.Set("json", "true")
 		r.URL.RawQuery = q.Encode()
 		return nil
-	})
+	}
 }
 
-func WithContext(ctx context.Context) RequestOptions {
-	return requestOptionApplier(func(r *http.Request) error {
+func WithContext(ctx context.Context) RequestOptionApplier {
+	return func(r *http.Request) error {
 		r2 := r.WithContext(ctx)
 		*r = *r2
 		return nil
-	})
+	}
 }

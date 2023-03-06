@@ -18,6 +18,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -58,7 +59,7 @@ type StopProposalExecutionResponse struct {
 
 func (r *StopProposalExecutionResponse) UnmarshalResponse(resp *http.Response) error {
 	if err := r.GenericResponse.UnmarshalResponse(resp); err != nil {
-		return err
+		return fmt.Errorf("failed to parse HTTP response metadata: %w", err)
 	}
 
 	var bodyBytes []byte
@@ -66,7 +67,7 @@ func (r *StopProposalExecutionResponse) UnmarshalResponse(resp *http.Response) e
 
 	bodyBytes, err = io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to read HTTP response body: %w", err)
 	}
 
 	var d interface{}
@@ -80,7 +81,7 @@ func (r *StopProposalExecutionResponse) UnmarshalResponse(resp *http.Response) e
 	}
 
 	if err = json.Unmarshal(bodyBytes, d); err != nil {
-		return err
+		return fmt.Errorf("failed to parse JSON response: %w", err)
 	}
 
 	return nil

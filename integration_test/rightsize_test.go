@@ -44,7 +44,7 @@ var _ = Describe("Rightsize", Label("api:rightsize", "api:user_tasks", "api:stat
 					req.Topic = AirPortsTopicName
 					req.PartitionCount = AirportsTopicNewPartitionSize
 
-					resp, err := cruisecontrol.Rightsize(req)
+					resp, err := cruisecontrol.Rightsize(ctx, req)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp.Failed()).To(BeFalse())
 

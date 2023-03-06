@@ -18,6 +18,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -112,7 +113,7 @@ type AddBrokerResponse struct {
 
 func (r *AddBrokerResponse) UnmarshalResponse(resp *http.Response) error {
 	if err := r.GenericResponse.UnmarshalResponse(resp); err != nil {
-		return err
+		return fmt.Errorf("failed to parse HTTP response metadata: %w", err)
 	}
 
 	var bodyBytes []byte
@@ -120,7 +121,7 @@ func (r *AddBrokerResponse) UnmarshalResponse(resp *http.Response) error {
 
 	bodyBytes, err = io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to read HTTP response body: %w", err)
 	}
 
 	var d interface{}
@@ -137,7 +138,7 @@ func (r *AddBrokerResponse) UnmarshalResponse(resp *http.Response) error {
 	}
 
 	if err = json.Unmarshal(bodyBytes, d); err != nil {
-		return err
+		return fmt.Errorf("failed to parse JSON response: %w", err)
 	}
 
 	return nil

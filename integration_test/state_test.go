@@ -40,7 +40,7 @@ var _ = Describe("State", Label("api:state"), func() {
 			By("sending request for Cruise Control state")
 			req := api.StateRequestWithDefaults()
 
-			resp, err := cruisecontrol.State(req)
+			resp, err := cruisecontrol.State(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 

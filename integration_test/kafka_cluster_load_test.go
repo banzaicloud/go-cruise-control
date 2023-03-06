@@ -81,7 +81,7 @@ var _ = Describe("Kafka Cluster Load", Label("api:load", "api:state"), func() {
 			It("should result no errors", func() {
 				By("requesting load information")
 				req := api.KafkaClusterLoadRequestWithDefaults()
-				resp, err := cruisecontrol.KafkaClusterLoad(req)
+				resp, err := cruisecontrol.KafkaClusterLoad(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 

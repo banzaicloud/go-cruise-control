@@ -43,7 +43,7 @@ var _ = Describe("Topic Configuration", Label("api:topic_configuration", "api:us
 			req.ReplicationFactor = AirportsTopicOldReplicationFactor
 			req.DryRun = false
 
-			resp, err := cruisecontrol.TopicConfiguration(req)
+			resp, err := cruisecontrol.TopicConfiguration(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 
@@ -64,7 +64,7 @@ var _ = Describe("Topic Configuration", Label("api:topic_configuration", "api:us
 					req.ReplicationFactor = AirportsTopicNewReplicationFactor
 					req.DryRun = false
 
-					resp, err := cruisecontrol.TopicConfiguration(req)
+					resp, err := cruisecontrol.TopicConfiguration(ctx, req)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp.Failed()).To(BeFalse())
 

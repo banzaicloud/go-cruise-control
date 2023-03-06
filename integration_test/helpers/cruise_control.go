@@ -31,7 +31,7 @@ func IsCruiseControlReady(ctx context.Context, cruisecontrol *client.Client) (bo
 
 	req := api.StateRequestWithDefaults()
 	req.Verbose = true
-	resp, err := cruisecontrol.State(req)
+	resp, err := cruisecontrol.State(ctx, req)
 	if err != nil {
 		return false, err
 	}
@@ -66,7 +66,7 @@ func HasUserTaskFinished(ctx context.Context, cruisecontrol *client.Client, task
 	req.Reason = "integration testing"
 	req.UserTaskIDs = []string{taskID}
 
-	resp, err := cruisecontrol.UserTasks(req)
+	resp, err := cruisecontrol.UserTasks(ctx, req)
 	if err != nil {
 		return false, err
 	}

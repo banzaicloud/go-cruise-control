@@ -63,7 +63,7 @@ var _ = Describe("Kafka Cluster State", Label("api:kafka_cluster_state", "api:st
 			It("should result no errors", func() {
 				By("requesting cluster state information")
 				req := api.KafkaClusterStateRequestWithDefaults()
-				resp, err := cruisecontrol.KafkaClusterState(req)
+				resp, err := cruisecontrol.KafkaClusterState(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 
@@ -92,7 +92,7 @@ var _ = Describe("Kafka Cluster State", Label("api:kafka_cluster_state", "api:st
 				req := api.KafkaClusterStateRequestWithDefaults()
 				req.Topic = AirPortsTopicName
 				req.Verbose = true
-				resp, err := cruisecontrol.KafkaClusterState(req)
+				resp, err := cruisecontrol.KafkaClusterState(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 

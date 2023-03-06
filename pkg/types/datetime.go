@@ -17,6 +17,7 @@ limitations under the License.
 package types
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -28,7 +29,7 @@ type DateTime struct {
 func (d *DateTime) UnmarshalJSON(b []byte) error {
 	t, err := strconv.Atoi(removeQuotes(string(b)))
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to parse datetime: %w", err)
 	}
 	d.Time = time.UnixMilli(int64(t))
 	return nil

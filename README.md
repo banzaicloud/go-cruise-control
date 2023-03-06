@@ -1,3 +1,6 @@
+[![CI](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/banzaicloud/go-cruise-control)
+
 # go-cruise-control
 
 It's client library (written in Golang) for interacting with
@@ -15,7 +18,9 @@ go get github.com/banzaicloud/go-cruise-control@latest
 package main
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/banzaicloud/go-cruise-control/client"
 	"github.com/banzaicloud/go-cruise-control/api"
@@ -27,11 +32,14 @@ func main() {
     if err != nil {
         panic(err)
     }
+	// Create Context with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)                                                                                                                                  │    │
+	defer cancel() 
     
     // Assembling the request using default values
     req := api.StateRequestWithDefaults()
     // Sending the request to the State API
-    resp, err := cruisecontrol.State(req)
+    resp, err := cruisecontrol.State(ctx, req)
     if err != nil {
         panic(err)
     }

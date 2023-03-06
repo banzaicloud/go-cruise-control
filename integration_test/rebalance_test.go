@@ -50,7 +50,7 @@ var _ = Describe("Rebalance",
 					req.Reason = "integration testing"
 					req.DryRun = false
 
-					resp, err := cruisecontrol.DemoteBroker(req)
+					resp, err := cruisecontrol.DemoteBroker(ctx, req)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp.Failed()).To(BeFalse())
 
@@ -66,7 +66,7 @@ var _ = Describe("Rebalance",
 						req2 := api.KafkaClusterStateRequestWithDefaults()
 						req2.Reason = "integration testing"
 
-						resp3, err := cruisecontrol.KafkaClusterState(req2)
+						resp3, err := cruisecontrol.KafkaClusterState(ctx, req2)
 						Expect(err).NotTo(HaveOccurred())
 						Expect(resp3.Failed()).To(BeFalse())
 
@@ -82,7 +82,7 @@ var _ = Describe("Rebalance",
 					req3 := api.RebalanceRequestWithDefaults()
 					req3.DryRun = false
 					req3.ExcludeRecentlyDemotedBrokers = false
-					resp4, err := cruisecontrol.Rebalance(req3)
+					resp4, err := cruisecontrol.Rebalance(ctx, req3)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp4.Failed()).To(BeFalse())
 

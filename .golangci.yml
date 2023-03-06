@@ -34,7 +34,7 @@ linters:
     - gci
     - ginkgolinter
     - gocheckcompilerdirectives
-#    - gochecknoglobals
+    - gochecknoglobals
     - gochecknoinits
     - gocognit
     - goconst
@@ -53,7 +53,7 @@ linters:
     - govet
     - importas
     - ineffassign
-#    - ireturn # FIXME(chrisgacsal)
+    - ireturn
     - lll
     - loggercheck
     - maintidx
@@ -80,7 +80,7 @@ linters:
     - unused
     - usestdlibvars
     - whitespace
-#    - wrapcheck # FIXME(chrisgacsal)
+    - wrapcheck
 
 linters-settings:
   cyclop:
@@ -118,4 +118,6 @@ linters-settings:
       - commentFormatting
   goimports:
     local-prefixes: github.com/banzaicloud
+  lll:
+    line-length: 135
 

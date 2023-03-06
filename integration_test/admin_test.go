@@ -55,7 +55,7 @@ var _ = Describe("Admin", Label("api:admin", "api:state"), Ordered, func() {
 				req.Reason = "integration testing"
 				req.EnableSelfHealingFor = anomalies
 
-				resp, err := cruisecontrol.Admin(req)
+				resp, err := cruisecontrol.Admin(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 
@@ -75,7 +75,7 @@ var _ = Describe("Admin", Label("api:admin", "api:state"), Ordered, func() {
 				req.Reason = "integration testing"
 				req.DisableSelfHealingFor = anomalies
 
-				resp, err := cruisecontrol.Admin(req)
+				resp, err := cruisecontrol.Admin(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 

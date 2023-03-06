@@ -49,7 +49,7 @@ var _ = Describe("Remove Broker",
 			req.BrokerIDs = []int32{brokerID}
 			req.DryRun = false
 			req.Reason = "integration testing"
-			resp, err := cruisecontrol.AddBroker(req)
+			resp, err := cruisecontrol.AddBroker(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 		})
@@ -62,7 +62,7 @@ var _ = Describe("Remove Broker",
 				req.DryRun = false
 				req.Reason = "integration testing"
 
-				resp, err := cruisecontrol.RemoveBroker(req)
+				resp, err := cruisecontrol.RemoveBroker(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
 
@@ -78,7 +78,7 @@ var _ = Describe("Remove Broker",
 					req2 := api.KafkaClusterStateRequestWithDefaults()
 					req2.Reason = "integration testing"
 
-					resp2, err := cruisecontrol.KafkaClusterState(req2)
+					resp2, err := cruisecontrol.KafkaClusterState(ctx, req2)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(resp2.Failed()).To(BeFalse())
 

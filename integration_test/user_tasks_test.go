@@ -38,7 +38,7 @@ var _ = Describe("User Tasks", Label("api:user_tasks", "api:state"), func() {
 		It("should result no errors", func() {
 			By("requesting load information")
 			req := api.UserTasksRequestWithDefaults()
-			resp, err := cruisecontrol.UserTasks(req)
+			resp, err := cruisecontrol.UserTasks(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 			Expect(len(resp.Result.UserTasks)).To(BeNumerically(">", 0))

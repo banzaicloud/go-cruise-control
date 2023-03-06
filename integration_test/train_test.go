@@ -44,7 +44,7 @@ var _ = Describe("Train", Label("api:train", "api:state"), func() {
 			req.Start = time.Now().UTC().Add(-5 * time.Minute).UnixMilli()
 			req.End = time.Now().UTC().UnixMilli()
 
-			resp, err := cruisecontrol.Train(req)
+			resp, err := cruisecontrol.Train(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 
@@ -55,7 +55,7 @@ var _ = Describe("Train", Label("api:train", "api:state"), func() {
 					types.SubstateMonitor,
 				}
 
-				resp2, err := cruisecontrol.State(req2)
+				resp2, err := cruisecontrol.State(ctx, req2)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp2.Failed()).To(BeFalse())
 				state := resp2.Result.MonitorState.State
@@ -71,7 +71,7 @@ var _ = Describe("Train", Label("api:train", "api:state"), func() {
 					types.SubstateMonitor,
 				}
 
-				resp2, err := cruisecontrol.State(req2)
+				resp2, err := cruisecontrol.State(ctx, req2)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp2.Failed()).To(BeFalse())
 				state := resp2.Result.MonitorState.State

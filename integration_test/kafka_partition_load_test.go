@@ -40,7 +40,7 @@ var _ = Describe("Kafka Partition Load", Label("api:kafka_partition_load", "api:
 			By("requesting partition load information")
 			req := api.KafkaPartitionLoadRequestWithDefaults()
 			req.MinValidPartitionRatio = 0
-			resp, err := cruisecontrol.KafkaPartitionLoad(req)
+			resp, err := cruisecontrol.KafkaPartitionLoad(ctx, req)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(resp.Failed()).To(BeFalse())
 
