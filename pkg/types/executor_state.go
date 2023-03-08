@@ -33,6 +33,8 @@ type ExecutorState struct {
 	NumFinishedLeadershipMovements  int32 `json:"numFinishedLeadershipMovements"`
 
 	MaximumConcurrentLeaderMovements int32 `json:"maximumConcurrentLeaderMovements,omitempty"`
+	MinimumConcurrentLeaderMovements int32 `json:"minimumConcurrentLeaderMovements,omitempty"`
+	AverageConcurrentLeaderMovements int32 `json:"averageConcurrentLeaderMovements,omitempty"`
 	NumTotalPartitionMovements       int32 `json:"numTotalPartitionMovements,omitempty"`
 	NumPendingPartitionMovements     int32 `json:"numPendingPartitionMovements,omitempty"`
 	NumCancelledPartitionMovements   int32 `json:"numCancelledPartitionMovements,omitempty"`
@@ -54,6 +56,8 @@ type ExecutorState struct {
 	TotalDataToMove      int64 `json:"totalDataToMove,omitempty"`
 
 	MaximumConcurrentPartitionMovementsPerBroker int32 `json:"maximumConcurrentPartitionMovementsPerBroker,omitempty"`
+	MinimumConcurrentPartitionMovementsPerBroker int32 `json:"minimumConcurrentPartitionMovementsPerBroker,omitempty"`
+	AverageConcurrentPartitionMovementsPerBroker int32 `json:"averageConcurrentPartitionMovementsPerBroker,omitempty"`
 	NumTotalIntraBrokerPartitionMovements        int32 `json:"numTotalIntraBrokerPartitionMovements,omitempty"`
 	NumFinishedIntraBrokerPartitionMovements     int32 `json:"numFinishedIntraBrokerPartitionMovements,omitempty"`
 	NumInProgressIntraBrokerPartitionMovements   int32 `json:"numInProgressIntraBrokerPartitionMovements,omitempty"`
@@ -73,6 +77,8 @@ type ExecutorState struct {
 	TotalIntraBrokerDataToMove      int64 `json:"totalIntraBrokerDataToMove,omitempty"`
 
 	MaximumConcurrentIntraBrokerPartitionMovementsPerBroker int32 `json:"maximumConcurrentIntraBrokerPartitionMovementsPerBroker,omitempty"` //nolint:lll
+	MinimumConcurrentIntraBrokerPartitionMovementsPerBroker int32 `json:"minimumConcurrentIntraBrokerPartitionMovementsPerBroker,omitempty"` //nolint:lll
+	AverageConcurrentIntraBrokerPartitionMovementsPerBroker int32 `json:"averageConcurrentIntraBrokerPartitionMovementsPerBroker,omitempty"` //nolint:lll
 
 	Error string `json:"error,omitempty"`
 }
