@@ -66,7 +66,9 @@ var _ = BeforeSuite(func() {
 		[]string{"../deploy/docker-compose.yml"},
 		cli.WithName("go-cruise-control"),
 		cli.WithWorkingDirectory("../deploy"),
-		cli.WithResolvedPaths(true))
+		cli.WithResolvedPaths(true),
+		cli.WithProfiles([]string{""}),
+	)
 	Expect(err).NotTo(HaveOccurred())
 
 	err = cli.WithOsEnv(opts)
