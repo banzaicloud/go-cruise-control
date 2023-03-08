@@ -1,6 +1,9 @@
 SHELL = /usr/bin/env bash -o pipefail
 .SHELLFLAGS = -ec
 
+CRUISE_CONTROL_VERSION ?= 2.5.101
+export CRUISE_CONTROL_IMAGE ?= ghcr.io/banzaicloud/cruise-control:$(CRUISE_CONTROL_VERSION)
+
 ##@ General
 
 help: ## Display this help.
