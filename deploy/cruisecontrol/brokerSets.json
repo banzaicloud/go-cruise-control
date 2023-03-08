@@ -1,0 +1,19 @@
+{
+  "brokerSets":[
+    {
+      "brokerSetId": "broker-set-0",
+      "brokerIds": [0],
+      "doc": "This block contains broker ids that belong to BrokerSet 0"
+    },
+    {
+      "brokerSetId": "broker-set-1",
+      "brokerIds": [1],
+      "doc": "This block contains broker ids that belong to BrokerSet 1"
+    },
+    {
+      "brokerSetId": "broker-set-2",
+      "brokerIds": [2],
+      "doc": "This block contains broker ids that belong to BrokerSet 2"
+    }
+  ]
+}

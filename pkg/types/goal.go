@@ -38,6 +38,9 @@ const (
 	ReplicaCapacityGoal
 	ReplicaDistributionGoal
 	TopicReplicaDistributionGoal
+	BrokerSetAwareGoal
+	KafkaAssignerDiskUsageDistributionGoal
+	KafkaAssignerEvenRackAwareGoal
 )
 
 type Goal int8
@@ -86,6 +89,12 @@ func (g Goal) String() string {
 		goal = "ReplicaDistributionGoal"
 	case TopicReplicaDistributionGoal:
 		goal = "TopicReplicaDistributionGoal"
+	case BrokerSetAwareGoal:
+		goal = "BrokerSetAwareGoal"
+	case KafkaAssignerDiskUsageDistributionGoal:
+		goal = "KafkaAssignerDiskUsageDistributionGoal"
+	case KafkaAssignerEvenRackAwareGoal:
+		goal = "KafkaAssignerEvenRackAwareGoal"
 	case UndefinedGoal:
 		fallthrough
 	default:
@@ -140,6 +149,12 @@ func (g *Goal) UnmarshalJSON(data []byte) error {
 		*g = ReplicaDistributionGoal
 	case TopicReplicaDistributionGoal.String():
 		*g = TopicReplicaDistributionGoal
+	case BrokerSetAwareGoal.String():
+		*g = BrokerSetAwareGoal
+	case KafkaAssignerDiskUsageDistributionGoal.String():
+		*g = KafkaAssignerDiskUsageDistributionGoal
+	case KafkaAssignerEvenRackAwareGoal.String():
+		*g = KafkaAssignerEvenRackAwareGoal
 	default:
 		*g = UndefinedGoal
 	}
@@ -172,5 +187,8 @@ func (g Goal) All() []Goal {
 		ReplicaCapacityGoal,
 		ReplicaDistributionGoal,
 		TopicReplicaDistributionGoal,
+		BrokerSetAwareGoal,
+		KafkaAssignerDiskUsageDistributionGoal,
+		KafkaAssignerEvenRackAwareGoal,
 	}
 }

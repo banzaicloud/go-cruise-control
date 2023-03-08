@@ -32,6 +32,7 @@ type KafkaBrokerState struct {
 	OnlineLogDirsByBrokerID       map[string][]string `json:"OnlineLogDirsByBrokerId"`
 	OfflineLogDirsByBrokerID      map[string][]string `json:"OfflineLogDirsByBrokerId"`
 	Summary                       KafkaClusterStats   `json:"Summary"`
+	BrokerSetByBrokerID           map[string]string   `json:"BrokerSetByBrokerId"`
 }
 
 type KafkaClusterStats struct {
