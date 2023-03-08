@@ -45,7 +45,7 @@ const (
 
 type Goal int8
 
-func (g Goal) String() string {
+func (g Goal) String() string { // nolint:cyclop
 	var goal string
 
 	switch g {
