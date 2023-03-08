@@ -69,6 +69,9 @@ var _ = BeforeSuite(func() {
 		cli.WithResolvedPaths(true))
 	Expect(err).NotTo(HaveOccurred())
 
+	err = cli.WithOsEnv(opts)
+	Expect(err).NotTo(HaveOccurred())
+
 	var reuseEnv bool
 	if reuseEnv, _ = strconv.ParseBool(os.Getenv("USE_EXISTING")); reuseEnv {
 		log.V(-1).Info("reusing existing environment...", "use_existing", reuseEnv)

@@ -61,13 +61,13 @@ func main() {
 Starting local development environment
 
 ```shell
-make env-up
+make start
 ```
 
 Tearing down the local development environment
 
 ```shell
-make env-clean
+make stop
 ```
 
 ### Testing

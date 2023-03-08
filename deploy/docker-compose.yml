@@ -39,7 +39,7 @@ services:
       retries: 30
 
   cruisecontrolmetrics:
-    image: ghcr.io/banzaicloud/cruise-control:2.5.101
+    image: "${CRUISE_CONTROL_IMAGE}"
     restart: "on-failure"
     hostname: cruisecontrolmetrics
     container_name: cruisecontrolmetrics
@@ -223,7 +223,7 @@ services:
       retries: 30
 
   cruisecontrol:
-    image: ghcr.io/banzaicloud/cruise-control:2.5.101
+    image: "${CRUISE_CONTROL_IMAGE}"
     restart: unless-stopped
     hostname: cruisecontrol
     container_name: cruisecontrol
@@ -322,6 +322,36 @@ services:
           "test",
           "-f",
           "/tmp/consumer.pid"
+      ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  kafka-ui:
+    profiles:
+      - development
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - kafka
+    depends_on:
+      - zookeeper
+      - kafka-0
+      - kafka-1
+      - kafka-2
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      KAFKA_CLUSTERS_0_JMXPORT: 9997
+    healthcheck:
+      test: [
+        "CMD",
+        "wget",
+        "--spider",
+        "http://127.0.0.1:8080/"
       ]
       interval: 10s
       timeout: 5s

@@ -1,52 +1,31 @@
 ##@ Development environment
 
-PROJECT_NAME = go-cruise-control
+DOCKER_COMPOSE_PROJECT_NAME = go-cruise-control
 DEPLOY_DIR ?= $(PROJECT_DIR)/deploy
+COMPOSE_PROFILES ?=
+DOCKER_COMPOSE_TIMEOUT ?= 120
 
-.PHONY: env-up
-env-up: ## Spin up local development environment
+export COMPOSE_PROFILES
+
+.PHONY: start
+start: ## Spin up local development environment
 	$(info *** Spinning up local development environment...)
-	@docker-compose \
-		--project-name $(PROJECT_NAME) \
-		--project-directory $(DEPLOY_DIR) \
-		--file $(DEPLOY_DIR)/docker-compose.yml \
+	docker compose \
+		--project-name "$(DOCKER_COMPOSE_PROJECT_NAME)" \
+		--project-directory "$(DEPLOY_DIR)" \
 		up \
 		--detach \
-		--quiet-pull \
-		--no-recreate \
-		--remove-orphans
+		--remove-orphans \
+		--timeout $(DOCKER_COMPOSE_TIMEOUT) \
+		--wait
 
-.PHONY: env-down
-env-down: ## Stop local development environment
+.PHONY: stop
+stop: ## Stop local development environment
 	$(info *** Stopping local development environment...)
-	@docker-compose \
-		--project-name $(PROJECT_NAME) \
-		--project-directory $(DEPLOY_DIR) \
-		--file $(DEPLOY_DIR)/docker-compose.yml \
+	@docker compose \
+		--project-name "$(DOCKER_COMPOSE_PROJECT_NAME)" \
+		--project-directory "$(DEPLOY_DIR)" \
 		down \
-		--remove-orphans
-
-.PHONY: env-clean
-env-clean: ## Cleanup local development environment
-	$(info *** Tearing down local development environment...)
-	@docker-compose \
-		--project-name $(PROJECT_NAME) \
-		--project-directory $(DEPLOY_DIR) \
-		--file $(DEPLOY_DIR)/docker-compose.yml \
-		down \
+		--remove-orphans \
 		--volumes \
-		--remove-orphans
-
-.PHONY: env-with-ui-up
-env-with-ui-up: ## Spin up local development environment
-	$(info *** Spinning up local development environment...)
-	@docker-compose \
-		--project-name $(PROJECT_NAME) \
-		--project-directory $(DEPLOY_DIR) \
-		--file $(DEPLOY_DIR)/docker-compose.yml \
-		--file $(DEPLOY_DIR)/docker-compose.ui.yml \
-		up \
-		--detach \
-		--quiet-pull \
-		--no-recreate \
-		--remove-orphans
+		--timeout $(DOCKER_COMPOSE_TIMEOUT)
