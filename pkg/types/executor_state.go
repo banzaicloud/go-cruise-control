@@ -32,11 +32,13 @@ type ExecutorState struct {
 	NumPendingLeadershipMovements   int32 `json:"numPendingLeadershipMovements"`
 	NumFinishedLeadershipMovements  int32 `json:"numFinishedLeadershipMovements"`
 
-	MaximumConcurrentLeaderMovements int32 `json:"maximumConcurrentLeaderMovements,omitempty"`
-	NumTotalPartitionMovements       int32 `json:"numTotalPartitionMovements,omitempty"`
-	NumPendingPartitionMovements     int32 `json:"numPendingPartitionMovements,omitempty"`
-	NumCancelledPartitionMovements   int32 `json:"numCancelledPartitionMovements,omitempty"`
-	NumInProgressPartitionMovements  int32 `json:"numInProgressPartitionMovements,omitempty"`
+	MaximumConcurrentLeaderMovements int32   `json:"maximumConcurrentLeaderMovements,omitempty"`
+	MinimumConcurrentLeaderMovements int32   `json:"minimumConcurrentLeaderMovements,omitempty"`
+	AverageConcurrentLeaderMovements float64 `json:"averageConcurrentLeaderMovements,omitempty"`
+	NumTotalPartitionMovements       int32   `json:"numTotalPartitionMovements,omitempty"`
+	NumPendingPartitionMovements     int32   `json:"numPendingPartitionMovements,omitempty"`
+	NumCancelledPartitionMovements   int32   `json:"numCancelledPartitionMovements,omitempty"`
+	NumInProgressPartitionMovements  int32   `json:"numInProgressPartitionMovements,omitempty"`
 
 	AbortingPartitions            int32 `json:"abortingPartitions,omitempty"`
 	NumFinishedPartitionMovements int32 `json:"numFinishedPartitionMovements,omitempty"`
@@ -53,13 +55,15 @@ type ExecutorState struct {
 	FinishedDataMovement int64 `json:"finishedDataMovement,omitempty"`
 	TotalDataToMove      int64 `json:"totalDataToMove,omitempty"`
 
-	MaximumConcurrentPartitionMovementsPerBroker int32 `json:"maximumConcurrentPartitionMovementsPerBroker,omitempty"`
-	NumTotalIntraBrokerPartitionMovements        int32 `json:"numTotalIntraBrokerPartitionMovements,omitempty"`
-	NumFinishedIntraBrokerPartitionMovements     int32 `json:"numFinishedIntraBrokerPartitionMovements,omitempty"`
-	NumInProgressIntraBrokerPartitionMovements   int32 `json:"numInProgressIntraBrokerPartitionMovements,omitempty"`
-	NumAbortingIntraBrokerPartitionMovements     int32 `json:"numAbortingIntraBrokerPartitionMovements,omitempty"`
-	NumPendingIntraBrokerPartitionMovements      int32 `json:"numPendingIntraBrokerPartitionMovements,omitempty"`
-	NumCancelledIntraBrokerPartitionMovements    int32 `json:"numCancelledIntraBrokerPartitionMovements,omitempty"`
+	MaximumConcurrentPartitionMovementsPerBroker int32   `json:"maximumConcurrentPartitionMovementsPerBroker,omitempty"`
+	MinimumConcurrentPartitionMovementsPerBroker int32   `json:"minimumConcurrentPartitionMovementsPerBroker,omitempty"`
+	AverageConcurrentPartitionMovementsPerBroker float64 `json:"averageConcurrentPartitionMovementsPerBroker,omitempty"`
+	NumTotalIntraBrokerPartitionMovements        int32   `json:"numTotalIntraBrokerPartitionMovements,omitempty"`
+	NumFinishedIntraBrokerPartitionMovements     int32   `json:"numFinishedIntraBrokerPartitionMovements,omitempty"`
+	NumInProgressIntraBrokerPartitionMovements   int32   `json:"numInProgressIntraBrokerPartitionMovements,omitempty"`
+	NumAbortingIntraBrokerPartitionMovements     int32   `json:"numAbortingIntraBrokerPartitionMovements,omitempty"`
+	NumPendingIntraBrokerPartitionMovements      int32   `json:"numPendingIntraBrokerPartitionMovements,omitempty"`
+	NumCancelledIntraBrokerPartitionMovements    int32   `json:"numCancelledIntraBrokerPartitionMovements,omitempty"`
 
 	InProgressIntraBrokerPartitionMovement []ExecutionTask `json:"inProgressIntraBrokerPartitionMovement,omitempty"`
 	PendingIntraBrokerPartitionMovement    []ExecutionTask `json:"pendingIntraBrokerPartitionMovement,omitempty"`
@@ -72,7 +76,9 @@ type ExecutorState struct {
 	FinishedIntraBrokerDataMovement int64 `json:"finishedIntraBrokerDataMovement,omitempty"`
 	TotalIntraBrokerDataToMove      int64 `json:"totalIntraBrokerDataToMove,omitempty"`
 
-	MaximumConcurrentIntraBrokerPartitionMovementsPerBroker int32 `json:"maximumConcurrentIntraBrokerPartitionMovementsPerBroker,omitempty"` //nolint:lll
+	MaximumConcurrentIntraBrokerPartitionMovementsPerBroker int32   `json:"maximumConcurrentIntraBrokerPartitionMovementsPerBroker,omitempty"` //nolint:lll
+	MinimumConcurrentIntraBrokerPartitionMovementsPerBroker int32   `json:"minimumConcurrentIntraBrokerPartitionMovementsPerBroker,omitempty"` //nolint:lll
+	AverageConcurrentIntraBrokerPartitionMovementsPerBroker float64 `json:"averageConcurrentIntraBrokerPartitionMovementsPerBroker,omitempty"` //nolint:lll
 
 	Error string `json:"error,omitempty"`
 }

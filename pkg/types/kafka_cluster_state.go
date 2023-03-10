@@ -32,6 +32,7 @@ type KafkaBrokerState struct {
 	OnlineLogDirsByBrokerID       map[string][]string `json:"OnlineLogDirsByBrokerId"`
 	OfflineLogDirsByBrokerID      map[string][]string `json:"OfflineLogDirsByBrokerId"`
 	Summary                       KafkaClusterStats   `json:"Summary"`
+	BrokerSetByBrokerID           map[string]string   `json:"BrokerSetByBrokerId"`
 }
 
 type KafkaClusterStats struct {
@@ -58,12 +59,13 @@ type KafkaPartitionState struct {
 }
 
 type PartitionState struct {
-	Topic             string  `json:"topic"`
-	Partition         int32   `json:"partition"`
-	Leader            int32   `json:"leader"`
-	Replicas          []int32 `json:"replicas"`
-	InSyncReplicas    []int32 `json:"in-sync"`
-	OutOfSyncReplicas []int32 `json:"out-of-sync"`
-	OfflineReplicas   []int32 `json:"offline"`
-	MinISRReplicas    int32   `json:"min-isr"`
+	Topic                string  `json:"topic"`
+	Partition            int32   `json:"partition"`
+	Leader               int32   `json:"leader"`
+	Replicas             []int32 `json:"replicas"`
+	InSyncReplicas       []int32 `json:"in-sync"`
+	OutOfSyncReplicas    []int32 `json:"out-of-sync"`
+	OfflineReplicas      []int32 `json:"offline"`
+	MinISRReplicas       int32   `json:"min-isr"`
+	RemoteStorageEnabled bool    `json:"remote-storage-enabled"`
 }
