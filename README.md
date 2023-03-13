@@ -27,24 +27,30 @@ import (
 )
 
 func main() {
-    // Initializing Cruise Control client with default configuration
-    cruisecontrol, err := client.NewDefaultClient()
-    if err != nil {
-        panic(err)
-    }
+	// Initializing Cruise Control client with default configuration
+	cruisecontrol, err := client.NewDefaultClient()
+	if err != nil {
+		panic(err)
+	}
+
 	// Create Context with timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)                                                                                                                                  │    │
+	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
 	defer cancel() 
-    
-    // Assembling the request using default values
-    req := api.StateRequestWithDefaults()
-    // Sending the request to the State API
-    resp, err := cruisecontrol.State(ctx, req)
-    if err != nil {
-        panic(err)
-    }
-    // Getting the state of the Executor
-    fmt.Println(resp.Result.ExecutorState.State)
+
+	// Optionally set request Reason to Context which will sent to Cruise Control as part of the HTTP request
+	ctx = client.ContextWithReason("example")
+
+	// Assembling the request using default values
+	req := api.StateRequestWithDefaults()
+
+	// Sending the request to the State API
+	resp, err := cruisecontrol.State(ctx, req)
+	if err != nil {
+		panic(err)
+	}
+
+	// Getting the state of the Executor
+	fmt.Println(resp.Result.ExecutorState.State)
 }
 ```
 

@@ -17,6 +17,7 @@ limitations under the License.
 package client
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -27,6 +28,10 @@ import (
 
 	"github.com/banzaicloud/go-cruise-control/pkg/internal/encoder"
 )
+
+const reasonContextKey reasonContextKeyType = "CruiseControlRequestReason"
+
+type reasonContextKeyType string
 
 // RequestMarshaler is the interface implemented by types that can marshal themselves into valid http.Request
 type RequestMarshaler interface {
@@ -86,4 +91,17 @@ func marshal(v interface{}) (*http.Request, error) {
 	}
 
 	return r, nil
+}
+
+func ContextWithReason(ctx context.Context, reason string) context.Context {
+	return context.WithValue(ctx, reasonContextKey, reason)
+}
+
+func ReasonFromContext(ctx context.Context) (string, bool) {
+	if r := ctx.Value(reasonContextKey); r != nil {
+		if rr, ok := r.(string); ok {
+			return rr, true
+		}
+	}
+	return "", false
 }
