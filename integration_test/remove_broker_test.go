@@ -34,16 +34,16 @@ var _ = Describe("Remove Broker",
 			brokerID int32 = 2
 		)
 
-		BeforeEach(func() {
+		BeforeEach(func(ctx SpecContext) {
 			By("waiting until Cruise Control is ready")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 				Expect(err).NotTo(HaveOccurred())
 				return ready
 			}, CruiseControlReadyTimeout, 15).Should(BeTrue())
 		})
 
-		AfterEach(func() {
+		AfterEach(func(ctx SpecContext) {
 			By("adding broker back to the Kafka cluster")
 			req := api.AddBrokerRequestWithDefaults()
 			req.BrokerIDs = []int32{brokerID}
@@ -55,7 +55,7 @@ var _ = Describe("Remove Broker",
 		})
 
 		Describe("Removing a broker in Kafka cluster", func() {
-			It("should return no error", func() {
+			It("should return no error", func(ctx SpecContext) {
 				By("sending a remove request to Cruise Control")
 				req := api.RemoveBrokerRequestWithDefaults()
 				req.BrokerIDs = []int32{brokerID}
@@ -67,14 +67,14 @@ var _ = Describe("Remove Broker",
 				Expect(resp.Failed()).To(BeFalse())
 
 				By("waiting until the remove task finished")
-				Eventually(func() bool {
+				Eventually(ctx, func() bool {
 					finished, err := helpers.HasUserTaskFinished(ctx, cruisecontrol, resp.TaskID)
 					Expect(err).NotTo(HaveOccurred())
 					return finished
 				}, 300, 15).Should(BeTrue())
 
 				By("checking that the broker has no partition replicas")
-				Eventually(func() int32 {
+				Eventually(ctx, func() int32 {
 					req2 := api.KafkaClusterStateRequestWithDefaults()
 					req2.Reason = "integration testing"
 

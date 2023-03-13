@@ -34,16 +34,16 @@ var _ = Describe("Demote Broker",
 			brokerID int32 = 2
 		)
 
-		BeforeEach(func() {
+		BeforeEach(func(ctx SpecContext) {
 			By("waiting until Cruise Control is ready")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 				Expect(err).NotTo(HaveOccurred())
 				return ready
 			}, CruiseControlReadyTimeout, 15).Should(BeTrue())
 		})
 
-		AfterEach(func() {
+		AfterEach(func(ctx SpecContext) {
 			By("re-balancing the Kafka cluster")
 			req := api.RebalanceRequestWithDefaults()
 			req.DryRun = false
@@ -54,7 +54,7 @@ var _ = Describe("Demote Broker",
 
 		Describe("Demoting a broker in Kafka cluster", func() {
 			Context("which has leader partitions", func() {
-				It("should return no error", func() {
+				It("should return no error", func(ctx SpecContext) {
 					By("sending a demote request to Cruise Control")
 					req := api.DemoteBrokerRequestWithDefaults()
 					req.BrokerIDs = []int32{brokerID}
@@ -66,14 +66,14 @@ var _ = Describe("Demote Broker",
 					Expect(resp.Failed()).To(BeFalse())
 
 					By("waiting until the demote request has finished")
-					Eventually(func() bool {
+					Eventually(ctx, func() bool {
 						finished, err := helpers.HasUserTaskFinished(ctx, cruisecontrol, resp.TaskID)
 						Expect(err).NotTo(HaveOccurred())
 						return finished
 					}, 300, 15).Should(BeTrue())
 
 					By("checking that the broker has no leader partitions")
-					Eventually(func() int32 {
+					Eventually(ctx, func() int32 {
 						req2 := api.KafkaClusterStateRequestWithDefaults()
 						req2.Reason = "integration testing"
 

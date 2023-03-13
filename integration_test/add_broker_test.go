@@ -31,9 +31,9 @@ var _ = Describe("Add Broker", Label("api:add_broker", "api:state"), Serial, fun
 		readyGoals []types.Goal
 	)
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -49,7 +49,7 @@ var _ = Describe("Add Broker", Label("api:add_broker", "api:state"), Serial, fun
 
 	Describe("Adding broker to Kafka cluster", func() {
 		Context("using goals in ready state", func() {
-			It("should return no error", func() {
+			It("should return no error", func(ctx SpecContext) {
 				req := api.AddBrokerRequestWithDefaults()
 				req.Goals = readyGoals
 				req.BrokerIDs = []int32{brokerID}
@@ -65,7 +65,7 @@ var _ = Describe("Add Broker", Label("api:add_broker", "api:state"), Serial, fun
 
 	Describe("Adding broker to Kafka cluster", func() {
 		Context("using the default goals", func() {
-			It("should return no error", func() {
+			It("should return no error", func(ctx SpecContext) {
 				req := api.AddBrokerRequestWithDefaults()
 				req.BrokerIDs = []int32{brokerID}
 				req.Reason = "integration testing"

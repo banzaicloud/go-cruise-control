@@ -27,9 +27,9 @@ var _ = Describe("Rightsize", Label("api:rightsize", "api:user_tasks", "api:stat
 	Serial,
 	func() {
 
-		BeforeEach(func() {
+		BeforeEach(func(ctx SpecContext) {
 			By("waiting until Cruise Control is ready")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 				Expect(err).NotTo(HaveOccurred())
 				return ready
@@ -38,7 +38,7 @@ var _ = Describe("Rightsize", Label("api:rightsize", "api:user_tasks", "api:stat
 
 		Describe("Rightsizing topic in Kafka cluster", func() {
 			Context("by increasing partition count", func() {
-				It("should return no error", func() {
+				It("should return no error", func(ctx SpecContext) {
 					By("sending rightsize request to Cruise Control")
 					req := api.RightsizeRequestWithDefaults()
 					req.Topic = AirPortsTopicName
@@ -49,7 +49,7 @@ var _ = Describe("Rightsize", Label("api:rightsize", "api:user_tasks", "api:stat
 					Expect(resp.Failed()).To(BeFalse())
 
 					By("waiting until the rightsize task finished")
-					Eventually(func() bool {
+					Eventually(ctx, func() bool {
 						finished, err := helpers.HasUserTaskFinished(ctx, cruisecontrol, resp.TaskID)
 						Expect(err).NotTo(HaveOccurred())
 						return finished

@@ -27,16 +27,16 @@ var _ = Describe("Topic Configuration", Label("api:topic_configuration", "api:us
 	Ordered,
 	func() {
 
-		BeforeEach(func() {
+		BeforeEach(func(ctx SpecContext) {
 			By("waiting until Cruise Control is ready")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 				Expect(err).NotTo(HaveOccurred())
 				return ready
 			}, CruiseControlReadyTimeout, 15).Should(BeTrue())
 		})
 
-		AfterAll(func() {
+		AfterAll(func(ctx SpecContext) {
 			By("sending topic configuration request to Cruise Control")
 			req := api.TopicConfigurationRequestWithDefaults()
 			req.Topic = AirPortsTopicName
@@ -48,7 +48,7 @@ var _ = Describe("Topic Configuration", Label("api:topic_configuration", "api:us
 			Expect(resp.Failed()).To(BeFalse())
 
 			By("waiting until the rightsize task finished")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				finished, err := helpers.HasUserTaskFinished(ctx, cruisecontrol, resp.TaskID)
 				Expect(err).NotTo(HaveOccurred())
 				return finished
@@ -57,7 +57,7 @@ var _ = Describe("Topic Configuration", Label("api:topic_configuration", "api:us
 
 		Describe("Updating topic configuration in Kafka cluster", func() {
 			Context("by increasing it's replication factor", func() {
-				It("should return no error", func() {
+				It("should return no error", func(ctx SpecContext) {
 					By("sending topic configuration request to Cruise Control")
 					req := api.TopicConfigurationRequestWithDefaults()
 					req.Topic = AirPortsTopicName
@@ -69,14 +69,14 @@ var _ = Describe("Topic Configuration", Label("api:topic_configuration", "api:us
 					Expect(resp.Failed()).To(BeFalse())
 
 					By("waiting until the topic configuration task finished")
-					Eventually(func() bool {
+					Eventually(ctx, func() bool {
 						finished, err := helpers.HasUserTaskFinished(ctx, cruisecontrol, resp.TaskID)
 						Expect(err).NotTo(HaveOccurred())
 						return finished
 					}, 300, 15).Should(BeTrue())
 
 					By("waiting until Cruise Control analyzer is ready")
-					Eventually(func() bool {
+					Eventually(ctx, func() bool {
 						ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 						Expect(err).NotTo(HaveOccurred())
 						return ready

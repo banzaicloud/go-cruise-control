@@ -26,9 +26,9 @@ import (
 
 var _ = Describe("Proposals", Label("api:proposals", "api:state"), func() {
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -36,7 +36,7 @@ var _ = Describe("Proposals", Label("api:proposals", "api:state"), func() {
 	})
 
 	Describe("Get current optimization proposal from Cruise Control", func() {
-		It("should return no error", func() {
+		It("should return no error", func(ctx SpecContext) {
 			By("getting proposal from Cruise Control")
 			req := api.ProposalsRequestWithDefaults()
 			req.Reason = "integration testing"

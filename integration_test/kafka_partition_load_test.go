@@ -25,9 +25,9 @@ import (
 
 var _ = Describe("Kafka Partition Load", Label("api:kafka_partition_load", "api:state"), func() {
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -35,8 +35,7 @@ var _ = Describe("Kafka Partition Load", Label("api:kafka_partition_load", "api:
 	})
 
 	Describe("Getting partition load information from Cruise Control", func() {
-		It("should result no errors", func() {
-
+		It("should result no errors", func(ctx SpecContext) {
 			By("requesting partition load information")
 			req := api.KafkaPartitionLoadRequestWithDefaults()
 			req.MinValidPartitionRatio = 0

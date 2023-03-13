@@ -67,9 +67,9 @@ var _ = Describe("Kafka Cluster Load", Label("api:load", "api:state"), func() {
 		}
 	)
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -78,7 +78,7 @@ var _ = Describe("Kafka Cluster Load", Label("api:load", "api:state"), func() {
 
 	Describe("Getting server/broker stats from Cruise Control", func() {
 		Context("for the last hour", func() {
-			It("should result no errors", func() {
+			It("should result no errors", func(ctx SpecContext) {
 				By("requesting load information")
 				req := api.KafkaClusterLoadRequestWithDefaults()
 				resp, err := cruisecontrol.KafkaClusterLoad(ctx, req)

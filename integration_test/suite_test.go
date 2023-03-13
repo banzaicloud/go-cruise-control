@@ -44,7 +44,6 @@ const (
 
 var (
 	testEnv       *envtest.Environment
-	ctx           context.Context
 	log           logr.Logger
 	logSyncFn     func() error
 	cruisecontrol *client.Client
@@ -55,12 +54,12 @@ func TestCruiseControlClient(t *testing.T) {
 	RunSpecs(t, "Run integration tests")
 }
 
-var _ = BeforeSuite(func() {
+var _ = BeforeSuite(func(ctx context.Context) {
 	var err error
 
 	By("creating test environment")
 	log, logSyncFn, err = envtest.NewLogger(GinkgoWriter)
-	ctx = logr.NewContext(context.Background(), log)
+	ctx = logr.NewContext(ctx, log)
 
 	opts, err := cli.NewProjectOptions(
 		[]string{"../deploy/docker-compose.yml"},
@@ -79,16 +78,16 @@ var _ = BeforeSuite(func() {
 		log.V(-1).Info("reusing existing environment...", "use_existing", reuseEnv)
 	}
 
-	testEnv, err = envtest.New(ctx, opts, reuseEnv)
+	testEnv, err = envtest.New(opts, reuseEnv)
 	Expect(err).NotTo(HaveOccurred())
 
 	By("starting test environment")
-	err = testEnv.Start()
+	err = testEnv.Start(ctx)
 	Expect(err).NotTo(HaveOccurred())
 
 	// Wait until the test environment is ready
 	Eventually(func() bool {
-		ready, err := testEnv.Ready()
+		ready, err := testEnv.Ready(ctx)
 		Expect(err).NotTo(HaveOccurred())
 		return ready
 	}, 15, 12).Should(BeTrue())
@@ -112,9 +111,9 @@ var _ = BeforeSuite(func() {
 	}, CruiseControlReadyTimeout, 15).Should(BeTrue())
 })
 
-var _ = AfterSuite(func() {
+var _ = AfterSuite(func(ctx context.Context) {
 	By("tearing down test environment")
-	err := testEnv.Stop()
+	err := testEnv.Stop(ctx)
 	Expect(err).NotTo(HaveOccurred())
 	defer func(fn func() error) {
 		err := fn()
