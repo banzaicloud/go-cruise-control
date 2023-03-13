@@ -26,9 +26,9 @@ import (
 
 var _ = Describe("State", Label("api:state"), func() {
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -36,7 +36,7 @@ var _ = Describe("State", Label("api:state"), func() {
 	})
 
 	Describe("Getting Cruise Control state", func() {
-		It("should return no error", func() {
+		It("should return no error", func(ctx SpecContext) {
 			By("sending request for Cruise Control state")
 			req := api.StateRequestWithDefaults()
 

@@ -28,9 +28,9 @@ import (
 
 var _ = Describe("Train", Label("api:train", "api:state"), func() {
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -38,7 +38,7 @@ var _ = Describe("Train", Label("api:train", "api:state"), func() {
 	})
 
 	Describe("Training Cruise Control to better the cluster model", func() {
-		It("should return no error", func() {
+		It("should return no error", func(ctx SpecContext) {
 			By("sending a bootstrap request to Cruise Control")
 			req := api.TrainRequestWithDefaults()
 			req.Start = time.Now().UTC().Add(-5 * time.Minute).UnixMilli()
@@ -49,7 +49,7 @@ var _ = Describe("Train", Label("api:train", "api:state"), func() {
 			Expect(resp.Failed()).To(BeFalse())
 
 			By("waiting until monitor state is changed to training")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				req2 := api.StateRequestWithDefaults()
 				req2.Substates = []types.Substate{
 					types.SubstateMonitor,
@@ -65,7 +65,7 @@ var _ = Describe("Train", Label("api:train", "api:state"), func() {
 			}, 300, 15).Should(BeTrue())
 
 			By("waiting until monitor state is changed back to running")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				req2 := api.StateRequestWithDefaults()
 				req2.Substates = []types.Substate{
 					types.SubstateMonitor,

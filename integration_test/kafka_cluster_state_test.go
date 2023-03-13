@@ -49,9 +49,9 @@ var _ = Describe("Kafka Cluster State", Label("api:kafka_cluster_state", "api:st
 		}
 	)
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -60,7 +60,7 @@ var _ = Describe("Kafka Cluster State", Label("api:kafka_cluster_state", "api:st
 
 	Describe("Getting broker/partition state from Cruise Control", func() {
 		Context("including all topics and with default verbosity", func() {
-			It("should result no errors", func() {
+			It("should result no errors", func(ctx SpecContext) {
 				By("requesting cluster state information")
 				req := api.KafkaClusterStateRequestWithDefaults()
 				resp, err := cruisecontrol.KafkaClusterState(ctx, req)
@@ -87,7 +87,7 @@ var _ = Describe("Kafka Cluster State", Label("api:kafka_cluster_state", "api:st
 
 	Describe("Getting broker/partition state from Cruise Control", func() {
 		Context("for airports topic with increased verbosity", func() {
-			It("should result no errors", func() {
+			It("should result no errors", func(ctx SpecContext) {
 				By("requesting cluster state information")
 				req := api.KafkaClusterStateRequestWithDefaults()
 				req.Topic = AirPortsTopicName

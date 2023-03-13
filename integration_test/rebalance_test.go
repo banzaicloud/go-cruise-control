@@ -32,9 +32,9 @@ var _ = Describe("Rebalance",
 			brokerID int32 = 2
 		)
 
-		BeforeEach(func() {
+		BeforeEach(func(ctx SpecContext) {
 			By("waiting until Cruise Control is ready")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 				Expect(err).NotTo(HaveOccurred())
 				return ready
@@ -43,7 +43,7 @@ var _ = Describe("Rebalance",
 
 		Describe("Re-balancing Kafka cluster", func() {
 			Context("after a broker got demoted", func() {
-				It("should return no error", func() {
+				It("should return no error", func(ctx SpecContext) {
 					By("demoting broker")
 					req := api.DemoteBrokerRequestWithDefaults()
 					req.BrokerIDs = []int32{brokerID}
@@ -55,14 +55,14 @@ var _ = Describe("Rebalance",
 					Expect(resp.Failed()).To(BeFalse())
 
 					By("waiting until executing demote request finished")
-					Eventually(func() bool {
+					Eventually(ctx, func() bool {
 						finished, err := helpers.HasUserTaskFinished(ctx, cruisecontrol, resp.TaskID)
 						Expect(err).NotTo(HaveOccurred())
 						return finished
 					}, 300, 15).Should(BeTrue())
 
 					By("checking that the broker has no leader partitions")
-					Eventually(func() int32 {
+					Eventually(ctx, func() int32 {
 						req2 := api.KafkaClusterStateRequestWithDefaults()
 						req2.Reason = "integration testing"
 
@@ -87,7 +87,7 @@ var _ = Describe("Rebalance",
 					Expect(resp4.Failed()).To(BeFalse())
 
 					By("waiting until re-balancing Kafka cluster finished")
-					Eventually(func() bool {
+					Eventually(ctx, func() bool {
 						finished, err := helpers.HasUserTaskFinished(ctx, cruisecontrol, resp4.TaskID)
 						Expect(err).NotTo(HaveOccurred())
 						return finished

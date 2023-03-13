@@ -26,16 +26,16 @@ import (
 
 var _ = Describe("Pause Sampling", Label("api:pause_sampling", "api:resume_sampling", "api:state"), func() {
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
 		}, CruiseControlReadyTimeout, 15).Should(BeTrue())
 	})
 
-	AfterEach(func() {
+	AfterEach(func(ctx SpecContext) {
 		By("resuming metric sampling Cruise Control")
 		req := api.ResumeSamplingRequestWithDefaults()
 		req.Reason = "integration testing"
@@ -45,7 +45,7 @@ var _ = Describe("Pause Sampling", Label("api:pause_sampling", "api:resume_sampl
 	})
 
 	Describe("Pausing metric sampling in Cruise Control", func() {
-		It("should return no error", func() {
+		It("should return no error", func(ctx SpecContext) {
 			By("sending a bootstrap request to Cruise Control")
 			req := api.PauseSamplingRequestWithDefaults()
 			req.Reason = "integration testing"
@@ -54,7 +54,7 @@ var _ = Describe("Pause Sampling", Label("api:pause_sampling", "api:resume_sampl
 			Expect(resp.Failed()).To(BeFalse())
 
 			By("waiting until monitor state is changed to paused")
-			Eventually(func() bool {
+			Eventually(ctx, func() bool {
 				req2 := api.StateRequestWithDefaults()
 				req2.Substates = []types.Substate{
 					types.SubstateMonitor,

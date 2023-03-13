@@ -40,16 +40,16 @@ const (
 )
 
 type Environment struct {
-	ctx      context.Context
 	composer api.Service
 	project  *types.Project
 	reuse    bool
 }
 
-func (e *Environment) Start() error {
+func (e *Environment) Start(ctx context.Context) error {
 	if e.reuse {
 		return nil
 	}
+
 	timeout := 1 * time.Minute
 	opts := api.UpOptions{
 		Create: api.CreateOptions{
@@ -66,10 +66,10 @@ func (e *Environment) Start() error {
 			Services:    e.Services(),
 		},
 	}
-	return e.composer.Up(e.ctx, e.project, opts)
+	return e.composer.Up(ctx, e.project, opts)
 }
 
-func (e *Environment) Stop() error {
+func (e *Environment) Stop(ctx context.Context) error {
 	if e.reuse {
 		return nil
 	}
@@ -80,12 +80,12 @@ func (e *Environment) Stop() error {
 		Volumes:       true,
 		Timeout:       &timeout,
 	}
-	return e.composer.Down(e.ctx, e.project.Name, downOpts)
+	return e.composer.Down(ctx, e.project.Name, downOpts)
 }
 
-func (e *Environment) StartService(service string) error {
+func (e *Environment) StartService(ctx context.Context, service string) error {
 	services := []string{service}
-	ps, err := e.composer.Ps(e.ctx, e.project.Name, api.PsOptions{Services: services, Project: e.project})
+	ps, err := e.composer.Ps(ctx, e.project.Name, api.PsOptions{Services: services, Project: e.project})
 	if err != nil {
 		return err
 	}
@@ -99,23 +99,23 @@ func (e *Environment) StartService(service string) error {
 		WaitTimeout: 2 * time.Minute,
 		Services:    services,
 	}
-	return e.composer.Start(e.ctx, e.project.Name, opts)
+	return e.composer.Start(ctx, e.project.Name, opts)
 }
 
-func (e *Environment) StopService(service string) error {
+func (e *Environment) StopService(ctx context.Context, service string) error {
 	timeout := 1 * time.Minute
 	opts := api.StopOptions{
 		Timeout:  &timeout,
 		Services: []string{service},
 		Project:  e.project,
 	}
-	return e.composer.Stop(e.ctx, e.project.Name, opts)
+	return e.composer.Stop(ctx, e.project.Name, opts)
 }
 
-func (e *Environment) Ready() (bool, error) {
+func (e *Environment) Ready(ctx context.Context) (bool, error) {
 	services := e.Services()
 
-	ps, err := e.composer.Ps(e.ctx, e.project.Name, api.PsOptions{Services: services, Project: e.project})
+	ps, err := e.composer.Ps(ctx, e.project.Name, api.PsOptions{Services: services, Project: e.project})
 	if err != nil {
 		return false, err
 	}
@@ -173,7 +173,7 @@ func (e *Environment) Services() []string {
 	return services
 }
 
-func New(ctx context.Context, o *cli.ProjectOptions, reuse bool) (*Environment, error) {
+func New(o *cli.ProjectOptions, reuse bool) (*Environment, error) {
 	project, err := cli.ProjectFromOptions(o)
 	if err != nil {
 		return nil, err
@@ -202,7 +202,6 @@ func New(ctx context.Context, o *cli.ProjectOptions, reuse bool) (*Environment, 
 	}
 
 	return &Environment{
-		ctx:      ctx,
 		composer: compose.NewComposeService(cmd),
 		project:  project,
 		reuse:    reuse,

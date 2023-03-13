@@ -25,9 +25,9 @@ import (
 
 var _ = Describe("User Tasks", Label("api:user_tasks", "api:state"), func() {
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -35,7 +35,7 @@ var _ = Describe("User Tasks", Label("api:user_tasks", "api:state"), func() {
 	})
 
 	Describe("Getting the list of user tasks from Cruise Control", func() {
-		It("should result no errors", func() {
+		It("should result no errors", func(ctx SpecContext) {
 			By("requesting load information")
 			req := api.UserTasksRequestWithDefaults()
 			resp, err := cruisecontrol.UserTasks(ctx, req)

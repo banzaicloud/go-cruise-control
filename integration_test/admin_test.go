@@ -26,9 +26,9 @@ import (
 
 var _ = Describe("Admin", Label("api:admin", "api:state"), Ordered, func() {
 
-	BeforeEach(func() {
+	BeforeEach(func(ctx SpecContext) {
 		By("waiting until Cruise Control is ready")
-		Eventually(func() bool {
+		Eventually(ctx, func() bool {
 			ready, err := helpers.IsCruiseControlReady(ctx, cruisecontrol)
 			Expect(err).NotTo(HaveOccurred())
 			return ready
@@ -49,7 +49,7 @@ var _ = Describe("Admin", Label("api:admin", "api:state"), Ordered, func() {
 		)
 
 		Context("to enable self-healing for all anomaly types", func() {
-			It("successfully", func() {
+			It("successfully", func(ctx SpecContext) {
 				By("sending the request")
 				req := api.AdminRequestWithDefaults()
 				req.Reason = "integration testing"
@@ -69,7 +69,7 @@ var _ = Describe("Admin", Label("api:admin", "api:state"), Ordered, func() {
 		})
 
 		Context("to disable self-healing for all anomaly types", func() {
-			It("should result no errors", func() {
+			It("should result no errors", func(ctx SpecContext) {
 				By("sending the request")
 				req := api.AdminRequestWithDefaults()
 				req.Reason = "integration testing"
