@@ -32,6 +32,8 @@ const (
 	HTTPHeaderContentType = "Content-Type"
 	MIMETypeJSON          = "application/json"
 	ChartSetUTF8          = "utf-8"
+	JSONQueryParam        = "json"
+	ReasonQueryParam      = "reason"
 )
 
 type RequestOptions interface {
@@ -87,13 +89,13 @@ func WithMethod(m string) RequestOptionApplier {
 }
 
 func WithHeader(h string, v string) RequestOptionApplier {
-	return RequestOptionApplier(func(r *http.Request) error {
+	return func(r *http.Request) error {
 		if r.Header == nil {
 			r.Header = make(http.Header)
 		}
 		r.Header.Set(h, v)
 		return nil
-	})
+	}
 }
 
 func WithUserAgent(agent string) RequestOptionApplier {
@@ -109,24 +111,36 @@ func WithContentTypeJSON() RequestOptionApplier {
 }
 
 func WithJSONQuery() RequestOptionApplier {
-	return func(r *http.Request) error {
-		if r.URL == nil {
-			r.URL = &url.URL{}
-		}
-		q, err := url.ParseQuery(r.URL.RawQuery)
-		if err != nil {
-			return fmt.Errorf("failed to apply JSON query parameter to HTTP request: %w", err)
-		}
-		q.Set("json", "true")
-		r.URL.RawQuery = q.Encode()
-		return nil
-	}
+	return WithQuery(JSONQueryParam, "true")
 }
 
 func WithContext(ctx context.Context) RequestOptionApplier {
 	return func(r *http.Request) error {
 		r2 := r.WithContext(ctx)
 		*r = *r2
+		return nil
+	}
+}
+
+func WithReasonFromContext(ctx context.Context) RequestOptionApplier {
+	reason, ok := ReasonFromContext(ctx)
+	if !ok {
+		return func(r *http.Request) error { return nil }
+	}
+	return WithQuery(ReasonQueryParam, reason)
+}
+
+func WithQuery(k, v string) RequestOptionApplier {
+	return func(r *http.Request) error {
+		if r.URL == nil {
+			r.URL = &url.URL{}
+		}
+		q, err := url.ParseQuery(r.URL.RawQuery)
+		if err != nil {
+			return fmt.Errorf("failed to apply %s query parameter to HTTP request: %w", k, err)
+		}
+		q.Set(k, v)
+		r.URL.RawQuery = q.Encode()
 		return nil
 	}
 }

@@ -86,6 +86,10 @@ func (c Client) request(ctx context.Context, req interface{}, resp types.APIResp
 		WithContext(ctx),
 	}
 
+	if _, ok := req.(types.RequestReasoner); ok {
+		opts = append(opts, WithReasonFromContext(ctx))
+	}
+
 	httpResp, err := c.send(ctx, r, opts...)
 	if err != nil {
 		return err

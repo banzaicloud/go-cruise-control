@@ -43,11 +43,21 @@ type GenericRequest struct {
 	DoAs string `param:"doAs,omitempty"`
 }
 
+// RequestReasoner is a dummy interface to help identifying APIRequests
+// which have the `Reason` field without the need for using reflection
+type RequestReasoner interface {
+	requestReason() string
+}
+
 type GenericRequestWithReason struct {
 	GenericRequest
 
 	// Reason for request
 	Reason string `param:"reason,omitempty"`
+}
+
+func (r GenericRequestWithReason) requestReason() string {
+	return r.Reason
 }
 
 type APIResponse interface {
