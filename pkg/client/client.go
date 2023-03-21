@@ -137,8 +137,13 @@ func NewClient(opts *Config) (*Client, error) {
 	// 	Jar:       jar,
 	// 	Timeout:   0,
 	// }
+	transport := http.DefaultTransport
+	if opts.Transport != nil {
+		transport = opts.Transport
+	}
+
 	client.httpClient = &http.Client{
-		Transport: http.DefaultTransport,
+		Transport: transport,
 	}
 
 	serverURL := DefaultServerURL
