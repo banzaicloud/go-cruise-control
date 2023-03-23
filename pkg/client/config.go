@@ -17,6 +17,7 @@ limitations under the License.
 package client
 
 import (
+	"net/http"
 	"os"
 )
 
@@ -38,6 +39,7 @@ type Config struct {
 	Password    string
 	AccessToken string
 	UserAgent   string
+	Transport   http.RoundTripper
 }
 
 func (c *Config) ReadFromEnvironment() {
