@@ -137,18 +137,17 @@ func NewClient(opts *Config) (*Client, error) {
 	// 	Jar:       jar,
 	// 	Timeout:   0,
 	// }
-	transport := http.DefaultTransport
-	if opts.Transport != nil {
-		transport = opts.Transport
+
+	client.httpClient = opts.HTTPClient
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{
+			Transport: http.DefaultTransport,
+		}
 	}
 
-	client.httpClient = &http.Client{
-		Transport: transport,
-	}
-
-	serverURL := DefaultServerURL
-	if opts.ServerURL != "" {
-		serverURL = opts.ServerURL
+	serverURL := opts.ServerURL
+	if serverURL == "" {
+		serverURL = DefaultServerURL
 	}
 	if !strings.HasSuffix(serverURL, "/") {
 		serverURL += "/"
