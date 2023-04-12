@@ -35,6 +35,9 @@ type BasicAuth struct {
 }
 
 func (a BasicAuth) Apply(r *http.Request) error {
+	if r.Header == nil {
+		r.Header = make(http.Header)
+	}
 	r.SetBasicAuth(a.username, a.password)
 	return nil
 }
