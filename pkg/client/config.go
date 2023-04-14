@@ -39,7 +39,8 @@ type Config struct {
 	Password    string
 	AccessToken string
 	UserAgent   string
-	Transport   http.RoundTripper
+
+	HTTPClient *http.Client
 }
 
 func (c *Config) ReadFromEnvironment() {
