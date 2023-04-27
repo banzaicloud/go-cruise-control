@@ -1,7 +1,8 @@
-[![CI](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/banzaicloud/go-cruise-control)
-
 # go-cruise-control
+
+[![GitHub Workflow Status](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml/badge.svg?style=flat-square)](https://github.com/banzaicloud/go-cruise-control/actions/workflows/ci.yaml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/banzaicloud/go-cruise-control/badge?style=flat-square)](https://api.securityscorecards.dev/projects/github.com/banzaicloud/go-cruise-control)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/banzaicloud/go-cruise-control?style=flat-square)](https://github.com/banzaicloud/go-cruise-control/releases/latest)
 
 It's client library (written in Golang) for interacting with
 [Linkedin Cruise Control](https://github.com/linkedin/cruise-control) using its HTTP API.

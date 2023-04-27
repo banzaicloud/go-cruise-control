@@ -2,33 +2,65 @@ name: CI
 
 on:
   push:
-    branches:
-      - 'main'
-    tags:
-      - "v[0-9].[0-9]+.[0-9]+*"
+    branches: [ main ]
+    tags: [ "v[0-9].[0-9]+.[0-9]+*" ]
   pull_request:
-    branches:
-      - 'main'
+
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  lint:
+  test:
+    name: Test
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
+    strategy:
+      matrix:
+        go: ['1.18', '1.19', '1.20']
 
-      - name: Install Golang
-        uses: actions/setup-go@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Set up Go
+        uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9 # v4.0.0
         with:
-          go-version: '~1.18'
-          cache: true
+          go-version: ${{ matrix.go }}
+
+      - name: Test
+        run: make test
+
+  integration-test:
+    name: Integration test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Set up Go
+        uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9 # v4.0.0
+        with:
+          go-version: '1.20'
+
+      - name: Run integration tests
+        run: make integration-test
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Set up Go
+        uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9 # v4.0.0
+        with:
+          go-version: '1.20'
 
       - name: Run go fmt
         run: make fmt
@@ -40,13 +72,17 @@ jobs:
         run: make lint
 
   license:
+    name: License check
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Set up Go
+        uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9 # v4.0.0
+        with:
+          go-version: '1.20'
 
       - name: Update license cache
         run: make license-cache
@@ -58,20 +94,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  integration-test:
+  dependency-review:
+    name: Dependency review
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+    if: github.event_name == 'pull_request'
+
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
-      - name: Install Golang
-        uses: actions/setup-go@v3
-        with:
-          go-version: '~1.18'
-          cache: true
-
-      - name: Run integration tests
-        run: make integration-test
+      - name: Dependency Review
+        uses: actions/dependency-review-action@f46c48ed6d4f1227fb2d9ea62bf6bcbed315589e # v3.0.4
