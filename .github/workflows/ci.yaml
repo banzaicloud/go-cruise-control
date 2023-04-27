@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [ main ]
+    tags: [ "v[0-9].[0-9]+.[0-9]+*" ]
   pull_request:
 
 permissions:
@@ -13,9 +14,6 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     strategy:
-      # Fail fast is disabled because there are Go version specific features and tests
-      # that should be able to fail independently.
-      fail-fast: false
       matrix:
         go: ['1.18', '1.19', '1.20']
 
