@@ -32,7 +32,7 @@ jobs:
         run: make test
 
   integration-test:
-    name: Test
+    name: Integration test
     runs-on: ubuntu-latest
 
     steps:
