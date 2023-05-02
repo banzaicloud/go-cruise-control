@@ -83,6 +83,11 @@ func (c *Client) RemoveBroker(ctx context.Context, r *api.RemoveBrokerRequest) (
 	return resp, c.request(ctx, r, resp, api.EndpointRemoveBroker, http.MethodPost)
 }
 
+func (c *Client) RemoveDisks(ctx context.Context, r *api.RemoveDisksRequest) (*api.RemoveDisksResponse, error) {
+	resp := &api.RemoveDisksResponse{}
+	return resp, c.request(ctx, r, resp, api.EndpointRemoveDisks, http.MethodPost)
+}
+
 func (c *Client) ResumeSampling(ctx context.Context, r *api.ResumeSamplingRequest) (*api.ResumeSamplingResponse, error) {
 	resp := &api.ResumeSamplingResponse{}
 	return resp, c.request(ctx, r, resp, api.EndpointResumeSampling, http.MethodPost)

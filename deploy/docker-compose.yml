@@ -246,11 +246,10 @@ services:
         source: ./cruisecontrol
         target: /opt/cruise-control/config
     healthcheck:
+      # curl is not installed in the adobe image
       test: [
-          "CMD",
-          "curl",
-          "-f",
-          "http://127.0.0.1:8090/"
+        "CMD-SHELL",
+        "bash -c 'echo > /dev/tcp/localhost/8090'",
       ]
       interval: 10s
       timeout: 5s

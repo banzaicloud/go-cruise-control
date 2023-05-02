@@ -105,24 +105,24 @@ type HostLoadStats struct {
 }
 
 type BrokerLoadStats struct {
-	FollowerNwInRate   float64     `json:"FollowerNwInRate"`
-	BrokerState        BrokerState `json:"BrokerState"`
-	Broker             int32       `json:"Broker"`
-	NwOutRate          float64     `json:"NwOutRate"`
-	NumCore            float64     `json:"NumCore"`
-	Host               string      `json:"Host"`
-	CPUPct             float64     `json:"CpuPct"`
-	Replicas           int32       `json:"Replicas"`
-	NetworkInCapacity  float64     `json:"NetworkInCapacity"`
-	Rack               string      `json:"Rack"`
-	Leaders            int32       `json:"Leaders"`
-	DiskCapacityMB     float64     `json:"DiskCapacityMB"`
-	DiskMB             float64     `json:"DiskMB"`
-	PnwOutRate         float64     `json:"PnwOutRate"`
-	NetworkOutCapacity float64     `json:"NetworkOutCapacity"`
-	LeaderNwInRate     float64     `json:"LeaderNwInRate"`
-	DiskPct            float64     `json:"DiskPct"`
-	DiskState          []DiskStats `json:"DiskState"`
+	FollowerNwInRate   float64              `json:"FollowerNwInRate"`
+	BrokerState        BrokerState          `json:"BrokerState"`
+	Broker             int32                `json:"Broker"`
+	NwOutRate          float64              `json:"NwOutRate"`
+	NumCore            float64              `json:"NumCore"`
+	Host               string               `json:"Host"`
+	CPUPct             float64              `json:"CpuPct"`
+	Replicas           int32                `json:"Replicas"`
+	NetworkInCapacity  float64              `json:"NetworkInCapacity"`
+	Rack               string               `json:"Rack"`
+	Leaders            int32                `json:"Leaders"`
+	DiskCapacityMB     float64              `json:"DiskCapacityMB"`
+	DiskMB             float64              `json:"DiskMB"`
+	PnwOutRate         float64              `json:"PnwOutRate"`
+	NetworkOutCapacity float64              `json:"NetworkOutCapacity"`
+	LeaderNwInRate     float64              `json:"LeaderNwInRate"`
+	DiskPct            float64              `json:"DiskPct"`
+	DiskState          map[string]DiskStats `json:"DiskState"`
 }
 
 const (
