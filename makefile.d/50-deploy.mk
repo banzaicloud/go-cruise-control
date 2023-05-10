@@ -16,7 +16,7 @@ start: ## Spin up local development environment
 		up \
 		--detach \
 		--remove-orphans \
-		--timeout $(DOCKER_COMPOSE_TIMEOUT) \
+		-t $(DOCKER_COMPOSE_TIMEOUT) \
 		--wait
 
 .PHONY: stop
@@ -28,4 +28,4 @@ stop: ## Stop local development environment
 		down \
 		--remove-orphans \
 		--volumes \
-		--timeout $(DOCKER_COMPOSE_TIMEOUT)
+		-t $(DOCKER_COMPOSE_TIMEOUT)
