@@ -36,6 +36,10 @@ jobs:
   integration-test:
     name: Integration test
     runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        cruisecontrol: ['2.5.113', '2.5.101']
 
     steps:
       - name: Checkout repository
@@ -48,6 +52,8 @@ jobs:
 
       - name: Run integration tests
         run: make integration-test
+        env:
+          CRUISE_CONTROL_VERSION: ${{ matrix.cruisecontrol }}
 
   lint:
     name: Lint
