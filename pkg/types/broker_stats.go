@@ -122,7 +122,8 @@ type BrokerLoadStats struct {
 	NetworkOutCapacity float64     `json:"NetworkOutCapacity"`
 	LeaderNwInRate     float64     `json:"LeaderNwInRate"`
 	DiskPct            float64     `json:"DiskPct"`
-	DiskState          []DiskStats `json:"DiskState"`
+
+	DiskState map[string]DiskStats `json:"DiskState"`
 }
 
 const (

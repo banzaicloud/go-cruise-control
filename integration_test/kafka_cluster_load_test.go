@@ -17,10 +17,11 @@ limitations under the License.
 package integration_test
 
 import (
-	"github.com/banzaicloud/go-cruise-control/integration_test/helpers"
-	"github.com/banzaicloud/go-cruise-control/pkg/api"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+
+	"github.com/banzaicloud/go-cruise-control/integration_test/helpers"
+	"github.com/banzaicloud/go-cruise-control/pkg/api"
 )
 
 var _ = Describe("Kafka Cluster Load", Label("api:load", "api:state"), func() {
@@ -65,6 +66,11 @@ var _ = Describe("Kafka Cluster Load", Label("api:load", "api:state"), func() {
 				"rack-2",
 			},
 		}
+
+		expectedBrokerDisks = []string{
+			"/var/lib/kafka/data0",
+			"/var/lib/kafka/data1",
+		}
 	)
 
 	BeforeEach(func(ctx SpecContext) {
@@ -80,7 +86,10 @@ var _ = Describe("Kafka Cluster Load", Label("api:load", "api:state"), func() {
 		Context("for the last hour", func() {
 			It("should result no errors", func(ctx SpecContext) {
 				By("requesting load information")
-				req := api.KafkaClusterLoadRequestWithDefaults()
+				req := &api.KafkaClusterLoadRequest{
+					AllowCapacityEstimation: true,
+					PopulateDiskInfo:        true,
+				}
 				resp, err := cruisecontrol.KafkaClusterLoad(ctx, req)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(resp.Failed()).To(BeFalse())
@@ -94,6 +103,11 @@ var _ = Describe("Kafka Cluster Load", Label("api:load", "api:state"), func() {
 					Expect(ok).To(BeTrue())
 					Expect(broker.Host).To(Equal(expectedBroker.Host))
 					Expect(broker.Rack).To(Equal(expectedBroker.Rack))
+
+					for _, disk := range expectedBrokerDisks {
+						_, ok := broker.DiskState[disk]
+						Expect(ok).To(BeTrue())
+					}
 				}
 
 				By("getting host load statistics")
