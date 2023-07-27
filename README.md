@@ -93,11 +93,6 @@ export USE_EXISTING=true
 make integration-test
 ```
 
-## Support
-
-If you encounter problems while using this project than open an issue or talk to us
-on `#kafka-operator` channel on the [Banzai Cloud Community Slack](http://community-banzaicloud.slack.com).
-
 ## Contributing
 
 If you find this project useful, help us:
@@ -106,19 +101,26 @@ If you find this project useful, help us:
 * Help new users with issues they may encounter 💪
 * Send a pull request with your new features and bug fixes 🚀
 
+## Community
+
+Find us on [Slack](https://outshift.slack.com/channels/koperator)!
+
+<a href="https://github.com/banzaicloud/go-cruise-control/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=banzaicloud/koperator&max=30" />
+</a>
+
 ## License
 
-Copyright © 2021 Cisco and/or its affiliates. All rights reserved.
+Copyright (c) 2023 [Cisco Systems, Inc.](https://www.cisco.com) and/or its affiliates
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-
-## Trademarks
-
-The Banzai Cloud name, the Banzai Cloud logo, and all Banzai Cloud trademarks and logos are registered trademarks of Cisco.
+See the License for the specific language governing permissions and
+limitations under the License.
