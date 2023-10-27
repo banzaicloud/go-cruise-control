@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/banzaicloud/go-cruise-control v0.0.0
 	github.com/docker/compose/v2 v2.17.2
-	github.com/go-logr/logr v1.2.4
+	github.com/go-logr/logr v1.3.0
 	github.com/go-logr/zapr v1.2.3
 	github.com/onsi/ginkgo/v2 v2.11.0
 	github.com/onsi/gomega v1.27.10
