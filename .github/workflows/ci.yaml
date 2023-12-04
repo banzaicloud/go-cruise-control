@@ -18,9 +18,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go: ['1.18', '1.19', '1.20']
 
     steps:
       - name: Checkout repository
@@ -29,7 +26,19 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
         with:
-          go-version: ${{ matrix.go }}
+          cache: false
+          go-version-file: 'go.mod'
+
+      - name: Setup Go caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ github.ref_name }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ github.ref_name }}-
+            ${{ runner.os }}-go-${{ github.event.repository.default_branch }}-
 
       - name: Test
         run: make test
@@ -49,7 +58,19 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
         with:
-          go-version: '1.20'
+          cache: false
+          go-version-file: 'integration_test/go.mod'
+
+      - name: Setup Go caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ github.ref_name }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ github.ref_name }}-
+            ${{ runner.os }}-go-${{ github.event.repository.default_branch }}-
 
       - name: Run integration tests
         run: make integration-test
@@ -67,7 +88,19 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
         with:
-          go-version: '1.20'
+          cache: false
+          go-version-file: 'go.mod'
+
+      - name: Setup Go caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ github.ref_name }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ github.ref_name }}-
+            ${{ runner.os }}-go-${{ github.event.repository.default_branch }}-
 
       - name: Run go fmt
         run: make fmt
@@ -89,7 +122,8 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
         with:
-          go-version: '1.20'
+          cache: false
+          go-version-file: 'go.mod'
 
       - name: Update license cache
         run: make license-cache
