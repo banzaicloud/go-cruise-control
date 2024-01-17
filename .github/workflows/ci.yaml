@@ -30,7 +30,7 @@ jobs:
           go-version-file: 'go.mod'
 
       - name: Setup Go caching
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/go-build
@@ -62,7 +62,7 @@ jobs:
           go-version-file: 'integration_test/go.mod'
 
       - name: Setup Go caching
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/go-build
@@ -92,7 +92,7 @@ jobs:
           go-version-file: 'go.mod'
 
       - name: Setup Go caching
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/go-build
