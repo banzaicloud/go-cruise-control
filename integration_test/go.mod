@@ -7,7 +7,7 @@ require (
 	github.com/compose-spec/compose-go v1.20.0
 	github.com/docker/cli v24.0.7+incompatible
 	github.com/docker/compose/v2 v2.23.0
-	github.com/go-logr/logr v1.3.0
+	github.com/go-logr/logr v1.4.1
 	github.com/go-logr/zapr v1.2.3
 	github.com/onsi/ginkgo/v2 v2.13.0
 	github.com/onsi/gomega v1.30.0
