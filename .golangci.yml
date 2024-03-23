@@ -3,7 +3,13 @@ run:
   deadline: 2m
 
 output:
-  format: "checkstyle:report.xml,json:report.json,colored-line-number,github-actions"
+  formats:
+    - format: checkstyle
+      path: report.xml
+    - format: json
+      path: report.json
+    - format: colored-line-number
+    - format: github-actions
 
 linters:
   disable-all: true
@@ -16,7 +22,7 @@ linters:
     - contextcheck
     - cyclop
     - decorder
-    - depguard
+#    - depguard # FIXME(chrisgacsal)
     - dogsled
 #    - dupl
     - dupword
@@ -120,4 +126,10 @@ linters-settings:
     local-prefixes: github.com/banzaicloud
   lll:
     line-length: 135
+  revive:
+    rules:
+      - name: dot-imports
+        severity: warning
+        disabled: true
+        exclude: ["github.com/onsi/ginkgo/v2","github.com/onsi/gomega"]
 
